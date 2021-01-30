@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription:{% endblock %}
+{% block body %}
+<h1>Nouveau utilisateur</h1>
+
+{{ include('user/_form.html.twig') }}
+
+{% endblock %}
+{% block javascripts %}
+{{ parent()}}
+<script src="/js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DESSERTS{% endblock %}
+
+{% block body %}
+
+<h2 class="produits">Les Desserts</h2>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Images</th>
+            <th>Disponible</th>
+        </tr>
+    </thead>
+    {% for produit in produits %}
+    <tbody class="table-light">
+        <tr>
+            <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
+            <td>{{ produit.ProduitPrix }}€</td>
+            <td>
+                <div style="display: flex;">
+                    {% for key, image in produit.images %}
+                    {% if key == 0 %}
+                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                    <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </td>
+            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+            <td>
+                {% if produit.disponible == 'Oui' %}
+                <button type="button" class="btn btn-success">Commander</button>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Commander</button>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+
+    {% else %}
+    <tr>
+        <td colspan="5">no records found</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

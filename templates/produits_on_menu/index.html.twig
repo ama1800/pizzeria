@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProduitsOnMenu index{% endblock %}
+
+{% block body %}
+    <h1>ProduitsOnMenu index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for produits_on_menu in produits_on_menus %}
+            <tr>
+                <td>{{ produits_on_menu.id }}</td>
+                <td>
+                    <a href="{{ path('produits_on_menu_show', {'id': produits_on_menu.id}) }}">show</a>
+                    <a href="{{ path('produits_on_menu_edit', {'id': produits_on_menu.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('produits_on_menu_new') }}">Create new</a>
+{% endblock %}

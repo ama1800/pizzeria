@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+<h1>{{ produit.produitLibelle }}</h1>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th>images</th>
+            <td>
+                <div style="display: flex;">
+                    {% for image in produit.images %}
+                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                    <br>
+                    {% endfor %}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>ProduitLibelle</th>
+            <td>{{ produit.produitLibelle }}</td>
+        </tr>
+        <tr>
+            <th>ProduitPrix</th>
+            <td>{{ produit.ProduitPrix }}€</td>
+        </tr>
+        <tr>
+            <th>Disponible</th>
+            <td>{{ produit.disponible ? 'Yes' : 'No' }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<a href="{{ path('produit_index') }}">back to list</a>
+
+<a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a>
+
+{{ include('produit/_delete_form.html.twig') }}
+{% endblock %}

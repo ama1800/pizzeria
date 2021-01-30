@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ProduitsOnMenu{% endblock %}
+
+{% block body %}
+    <h1>Create new ProduitsOnMenu</h1>
+
+    {{ include('produits_on_menu/_form.html.twig') }}
+
+    <a href="{{ path('produits_on_menu_index') }}">back to list</a>
+{% endblock %}

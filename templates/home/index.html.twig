@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block stylesheets %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}" media="all" id="theme_css">
+    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}" media="all" id="themeMob_css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Audiowide|Sofia&effect=fire|neon|outline|emboss|shadow-multiple|Trirong|Roboto">
+    {% endblock %}
+    <link rel="icon" href="{{ asset('img/logoClient.png') }}" type="image/x-icon" />
+    <title>{% block title %}Accueil{% endblock %}</title>
+</head>
+
+<body>
+    <header>
+        <!-- navbar -->
+        <nav class="navhead">
+            <!-- navbar haute -->
+            <div class="headup">
+                <!-- logo -->
+                <div class="logo">
+                    <a href="{{ path('home')}}"><img src="{{ asset('img/logoClient1.png') }}" alt="" id="logo"></a>
+                </div>
+                <!-- mode livraison -->
+                <div class="delivry">
+                    <a href="" class="links"><img src="{{ asset('img/Delivery128.png') }}" alt="img"
+                            class="up"><br><span class="font-effect-neon">LIVRAISON</span> </a>
+                    <a href="" class="links"><img src="{{ asset('img/Delivery.png') }}" alt="img" class="up"><br><span
+                            class="font-effect-neon">RETIRER</span> </a>
+                </div>
+                <!-- le panier de la commande -->
+                <div class="panier">
+                    <a href="" class="liens"><img src="{{ asset('img/panier.png') }}" alt="img" class="down"><br><span
+                            class="font-effect-neon">LE PANIER</span></a>
+                </div>
+                <!-- espace utilisateur -->
+                <div class="user">
+                    {% if not app.user %}
+                    <div class="off">
+                        <a href="{{path('app_login')}}" class="links"><img src="{{ asset('img/connexion.png') }}"
+                                alt="img" class="up"></a>
+                        <a href="{{path('user_new')}}" class="links"><img src="{{ asset('img/inscription.png') }}"
+                                alt="img" class="up"></a>
+                    </div>
+                    {% else %}
+                    <div class="on">
+                        <a href="{{path('user_show',{'id': app.user.Id})}}" class="links"><img
+                                src="{{ asset('img/profile.jpg') }}" alt="img" class="up"></a>
+                        <a href="{{path('app_logout')}}" class="links"><img src="{{ asset('img/deconnexion.png') }}"
+                                alt="img" class="up"></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- liens de la navbar basse -->
+            <div id="headdown">
+                <a href="{{ path('home')}}" class="liens"><img src="{{ asset('img/home.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">ACCUEIL</span></a>
+                <a href="" class="liens"><img src="{{ asset('img/cart.png') }}" alt="img" class="down"><br><span
+                        class="font-effect-emboss">Meilleurs
+                        Ventes</span></a>
+                <a href="{{ path('menu_index') }}" class="liens"><img src="{{ asset('img/menu1.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">MENUS</span></a>
+                <a href="{{ path('pizzas') }}" class="liens"><img
+                        src="{{ asset('img/pizza-fast-food-bake-bread-128.png') }}" alt="img" class="down"><br><span
+                        class="font-effect-emboss">PIZZAS</span></a>
+                <a href="{{ path('boissons') }}" class="liens"><img src="{{ asset('img/soda.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">BOISSONS</span></a>
+                <a href="{{ path('salades') }}" class="liens"><img src="{{ asset('img/salad.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">SALADES</span></a>
+                <a href="{{ path('desserts') }}" class="liens"><img src="{{ asset('img/dessert.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">DESSERTS</span></a>
+                <a href="{{ path('tacos') }}" class="liens"><img src="{{ asset('img/Hamburger.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">TACOS</span></a>
+                <a href="{{ path('sauces') }}" class="liens"><img src="{{ asset('img/sauces.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">SAUCES</span></a>
+                <a href="{{ path('extras') }}" class="liens"><img src="{{ asset('img/plus.png') }}" alt="img"
+                        class="down"><br><span class="font-effect-emboss">EXTRAS</span></a>
+            </div>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()"></a>
+            <img src="{{ asset('img/burger.png') }}" alt="menu" id="imgburger">
+        </nav>
+        <div class="flash">
+            {% for key, messages in app.flashes() %}
+
+            {% if key == "success" %}
+            {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            {% elseif key == "danger" %}
+            {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            {% elseif key == "warning" %}
+            {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            {% else %}
+            {% for message in messages %}
+            <div class="alert alert-info">
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            {% endif %}
+            {% endfor %}
+            <div>
+                {% if app.user %}
+                {% if app.user.ActivationToken is not same as null %}
+                <a href="{{ path('resendActivation') }}">Code Activation</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- le coté gauche (Les annonces)-->
+        <div id="wrapper">
+            <!-- banner section -->
+            <section id="container1">
+                <figure>
+                    <img src="{{ asset('img/pizza1.jpg') }}" alt="Pizza">
+                    <figcaption id="TEMPLATE">
+                        <h1>Goutez La différence!</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veritatis, quos quis nisi velit
+                            porro non qui doloremque praesentium?
+                        </p>
+                        <button>LIRE PLUS</button>
+                    </figcaption>
+                </figure>
+            </section>
+            <section class="carte">
+                {% block body %}
+                <div class="example-wrapper">
+                    <div id="carte">
+                        <div>
+                            <div class="adresse-cordonnees">
+                                <div>
+                                    <strong>Pizza Chicken Burger</strong><br>
+                                    32 Place Saint-Médard<br>
+                                    60100 Creil
+                                </div>
+                                <div>
+                                    Tel. <a href="tel:+33951735430">09 51 73 54 30</a><br>
+                                    <a href="mailto:colmar@elan-formation.fr">email@host.fr</a>
+                                </div>
+                            </div>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}
+            </section>
+            <!-- section services -->
+            <section id="container2">
+                <h1 class="font-effect-shadow-multiple">Pourquoi Nous choisir?</h1>
+                <div class="articles">
+                    <div class="services">
+                        <article class="article">
+                            <i class="fas fa-crown"></i>
+                            <h2 class="font-effect-fire">VALEURS</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis tempore
+                                    eius cum,
+                                    deserunt.</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fa fa-rocket"></i>
+                            <h2 class="font-effect-fire">LIVRAISON</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                                    voluptatibus quas,
+                                    saepe
+                                    debitis distinctio perferendis!</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fa fa-lock"></i>
+                            <h2 class="font-effect-fire">HORAIRES</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quasi ullam
+                                    fugit nihil
+                                    porro aspernatur itaque.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="services">
+                        <article class="article">
+                            <i class="fas fa-pizza-slice"></i>
+                            <h2 class="font-effect-fire">PIZZAS</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis tempore
+                                    eius cum,
+                                    deserunt.</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fas fa-hotdog"></i>
+                            <h2 class="font-effect-fire">TACOS</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                                    voluptatibus quas!</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fas fa-pepper-hot"></i>
+                            <h2 class="font-effect-fire">SAUCES</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quasi ullam
+                                    fugit nihil.</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="services">
+                        <article class="article">
+                            <i class="fas fa-ice-cream"></i>
+                            <h2 class="font-effect-fire">DESSERTS</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis tempore
+                                    eius cum,
+                                    deserunt.</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fas fa-ice-cream"></i>
+                            <h2 class="font-effect-fire">SALADES</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                                    voluptatibus quas!</p>
+                            </div>
+                        </article>
+                        <article class="article">
+                            <i class="fa fa-lock"></i>
+                            <h2 class="font-effect-fire">PAIEMENT</h2>
+                            <div class="description">
+                                <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa quasi ullam
+                                    fugit nihil.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="row">
+                        <div class="column">
+                            <img src="{{ asset('img/pizza.jpg') }}" onclick="openModal();currentSlide(1)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/pizza1.jpg') }}" onclick="openModal();currentSlide(2)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/test.png') }}" onclick="openModal();currentSlide(3)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/sauces.png') }}" onclick="openModal();currentSlide(4)"
+                                class="hover-shadow">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <img src="{{ asset('img/halal.png') }}" onclick="openModal();currentSlide(5)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/home.png') }}" onclick="openModal();currentSlide(6)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/pizza_109.jpg') }}" onclick="openModal();currentSlide(7)"
+                                class="hover-shadow">
+                        </div>
+                        <div class="column">
+                            <img src="{{ asset('img/0615049d-7a70-4e05-9d03-187d14fb2c39.JPG') }}"
+                                onclick="openModal();currentSlide(8)" class="hover-shadow">
+                        </div>
+                    </div>
+                    <!-- The Modal/Lightbox -->
+                    <div id="myModal" class="modal">
+                        <span class="close cursor" onclick="closeModal()">&times;</span>
+                        <div class="modal-content">
+                            <div class="mySlides">
+                                <div class="numbertext">1 / 8</div>
+                                <img src="{{ asset('img/pizza.jpg') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">2 / 8</div>
+                                <img src="{{ asset('img/pizza1.jpg') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">3 / 8</div>
+                                <img src="{{ asset('img/test.png') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">4 / 8</div>
+                                <img src="{{ asset('img/sauces.png') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">5 / 8</div>
+                                <img src="{{ asset('img/halal.png') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">6 / 8</div>
+                                <img src="{{ asset('img/home.png') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">7 / 8</div>
+                                <img src="{{ asset('img/pizza_109.jpg') }}">
+                            </div>
+                            <div class="mySlides">
+                                <div class="numbertext">8 / 8</div>
+                                <img src="{{ asset('img/0615049d-7a70-4e05-9d03-187d14fb2c39.JPG') }}">
+                            </div>
+                            <!-- Next/previous controls -->
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                            <!-- Caption text -->
+                            <div class="caption-container">
+                                <p id="caption"></p>
+                            </div>
+                            <!-- Thumbnail image controls -->
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(1)" alt="Nature">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(2)" alt="Snow">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(3)" alt="Mountains">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(4)" alt="Lights">
+                            </div>
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(5)" alt="Nature">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(6)" alt="Snow">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(7)" alt="Mountains">
+                            </div>
+
+                            <div class="column">
+                                <img class="demo" src="{{ asset('https://via.placeholder.com/1200/09f/fff.png') }}"
+                                    onclick="currentSlide(8)" alt="Lights">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Les derniers commentaires stocker à la BDD -->
+                <div class="comments">
+                    <h2>Les Derniers Avis</h2>
+                    <div id="temoignages">
+                        <blockquote id="temoignage1">
+                            <img src="{{ asset('img/temoin1.jpg') }}" alt="temoin1">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo eos at obcaecati voluptate
+                                id
+                                nihil unde impedit molestias.<br><span>TOMMY MARS, </span><bdi>Lamine</bdi></p>
+                        </blockquote>
+                        <blockquote id="temoignage2">
+                            <p>officia aliquam, minima est repudiandae unde illum, odio laudantium architecto
+                                excepturi?<br><span>Floors Simmons, </span><bdi>Mayssa</bdi> </p>
+                            <img src="{{ asset('img/temoin2.jpg') }}" alt="temoin2">
+                        </blockquote>
+                        <blockquote id="temoignage3">
+                            <img src="{{ asset('img/temoin3.jpg') }}" alt="temoin3">
+                            <p>dolor sit, amet consectetur adipisicing elit. Suscipit distinctio sunt similique
+                                quibusdam, magni
+                                mollitia expedita totam possimus veniam culpa voluptatum <br><span>Mike Neil,
+                                </span><bdi>Mark</bdi></p>
+                        </blockquote>
+                    </div>
+                    <div id="btn_temoin"><button>Plus..>>></button></div>
+                </div>
+                <div class="contact">
+                    <h2>NOUS CONTACTER!</h2>
+                    <form action="#">
+                        <div id="formulaire">
+                            <div>
+                                <label class="obligatoire" for="nom">VOTRE NOM</label><br>
+                                <input type="text" id="nom" name="nom" value="" required><br><br>
+                                <label class="obligatoire" for="email">VOTRE EMAIL</label><br>
+                                <input type="email" id="email" name="email" value="" required><br><br>
+                                <label for="phone"></label>N° TELEPHONE<br>
+                                <input type="tel" id="phone" name="phone" value="" placeholder="0600000000"
+                                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"><br><br>
+                            </div>
+                            <div>
+                                <label for="sujet">SUJET</label><br>
+                                <input type="text" id="sujet" name="sujet" value=""><br><br>
+                                <label class="obligatoire" for="message">MESSAGE</label><br>
+                                <textarea id="message" name="message" required></textarea><br><br>
+                            </div>
+                        </div>
+                        <input id="send1" type="submit" value="ENVOYER">
+                    </form>
+                </div>
+            </section>
+        </div>
+        <section class="right">
+            <img src="{{ asset('img/halal.png') }}" class="halal" alt="img">
+            <img src="{{ asset('img/menu.png') }}" class="menu" alt="img">
+            <img src="{{ asset('img/pizza5.png') }}" class="pizza" alt="img">
+            <img src="{{ asset('img/pizza8.png') }}" class="pizza" alt="img">
+            <img src="{{ asset('img/pateCercle.png') }}" class="pizza1" alt="img">
+            <img src="{{ asset('img/bon.png') }}" class="promo" alt="img">
+            <img src="{{ asset('img/halal.png') }}" class="halal" alt="img">
+            <img src="{{ asset('img/phone.png') }}" class="menu" alt="img">
+        </section>
+    </main>
+    <footer>
+        <img src="{{ asset('img/90.png') }}" class="footer-img">
+        <div class="foot">
+            <div class="gauche">
+                <nav>
+                    <a href="">A propos</a>
+                    <a href="">Réglementation</a>
+                    <a href="">Divers</a>
+                </nav>
+            </div>
+            <div class="centre">
+                <img id="centre" src="{{ asset('img/phone.png') }}" alt="img">
+            </div>
+            <div class="droite">
+                <img src="{{ asset('img/cal.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/twi.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/fcb.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/ins.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/sna.png') }}" alt="img" class="socialMedia">
+            </div>
+        </div>
+        <p>Conformément aux articles 12 à 22 du Règlement (UE) 2016/679 (RGPD), Vous disposez d'un droit d'accès, de
+            rectification, d'opposition, de limitation et de portabilité au traitement de vos données personnelles. Vous
+            pouvez exercer ces droits en écrivant à : admin@admin.fr. Pour en savoir plus sur vos droits vous pouvez
+            consulter notre <a href="">Politique de confidentialité </a> sur notre site internet.</p>
+        <p class="edition">©
+            Pizza Chicken Burger par <small>AIT M'HAMED AHMED</small>
+            2021</p>
+    </footer>
+    {% block javascripts %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="{{ asset('js/carte.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h2>{{menu.libelle}}</h2>
+
+{{ form_start(form) }}
+<ul id="gestionProduits" data-prototype="{{ form_row(form.produitsOnMenus.vars.prototype)|e }}">
+
+    {% for produit in form.produitsOnMenus %}
+    <li class="gestionProduit">{{ form_row( produit ) }}</li>
+
+    {% endfor %}
+
+</ul>
+
+{{ form_row(form.submit) }}
+
+{{ form_end(form) }}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src='/js/CollectionType.js'></script>
+{% endblock %}
