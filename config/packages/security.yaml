@@ -27,6 +27,12 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
                 target: app_login
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                token_provider: 'Symfony\Bridge\Doctrine\Security\RememberMe\DoctrineTokenProvider'
+                #always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -44,7 +50,8 @@ security:
         - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_EMPLOYE: "ROLE_USER"
-        ROLE_GERANT: "ROLE_EMPLOYE"
-        ROLE_ADMIN: "ROLE_GERANT"
-        ROLE_SUPER_ADMIN: "ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH"
+        ROLE_USER:
+        ROLE_EMPLOYE: [ROLE_USER]
+        ROLE_GERANT: [ROLE_EMPLOYE]
+        ROLE_ADMIN: [ROLE_GERANT]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

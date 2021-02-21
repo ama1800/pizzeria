@@ -29,6 +29,7 @@ class Categorie
      */
     private $produits;
 
+    
     public function __construct()
     {
         $this->produits = new ArrayCollection();

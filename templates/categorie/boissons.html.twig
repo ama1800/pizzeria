@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token('submit-item') }}">
+{% endblock %}
 
 {% block title %}BOISSONS{% endblock %}
 
@@ -8,11 +11,12 @@
 <table class="table table-hover">
     <thead class="table-active">
         <tr>
-            <th>boisson</th>
+            <th>Produit</th>
             <th>Prix</th>
-            <th>Images</th>
+            <th>Image</th>
             <th>Disponible</th>
-            <th>Ajout au panier</th>
+            <th>Quantité</th>
+            <th>Ajouter au panier</th>
         </tr>
     </thead>
     {% for produit in produits %}
@@ -32,11 +36,23 @@
                 </div>
             </td>
             <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+            <td class="border-0 align-middle">
+                {% if produit.disponible == 'Oui' %}
+                <select name="qte" id="qte" data-id="{{ produit.id }}" class="custom-select">
+                    {% for i in 1..6 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                {% endif %}
+            </td>
             <td>
                 {% if produit.disponible == 'Oui' %}
-                <button type="button" class="btn btn-success">Commander</button>
+                <span data-id="{{ produit.id }}" type="submit" id="ajouter"><i style=" position:relative"
+                        class="fa fa-cart-plus fa-2x"></i></span>
                 {% else %}
-                <button type="button" class="btn btn-lg btn-primary" disabled>Rupture</button>
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
                 {% endif %}
             </td>
         </tr>
@@ -48,4 +64,9 @@
     </tr>
     {% endfor %}
 </table>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/updatePanier.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 {% endblock %}

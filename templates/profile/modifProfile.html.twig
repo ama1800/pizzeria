@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profile{% endblock %}
+
+{% block body %}
+{% if app.user.id == user.id or is_granted("ROLE_ADMIN") %}
+
+<div class="example-wrapper">
+    <div>
+        <h3>Modification du Profile</h3>
+        {{ form_start(form1) }}
+        {{ form_widget(form1) }}
+        {{ form_end(form1) }}
+    </div>
+    <div>
+        <h3>Modification du Password</h3>
+        {{ form(form2) }}
+
+    </div>
+
+    <div>
+        <h3>Modification de la photo</h3>
+    </div>
+</div>
+{% else %}
+<span style="color: red">Vous n'etes pas autoriser à afficher la page..! Contactez l'Admin. </span>
+{% endif %}
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

@@ -18,16 +18,21 @@ class ProduitsOnMenu
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="produitsOnMenus")
+     * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="produitsOnMenu")
      * @ORM\JoinColumn(nullable=false)
      */
     private $produit;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="produitsOnMenus")
+     * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="produitsOnMenu")
      * @ORM\JoinColumn(nullable=false)
      */
     private $menu;
+
+    public function __toString()
+    {
+        return $this->produit->getProduitLibelle();
+    }
 
     public function getId(): ?int
     {

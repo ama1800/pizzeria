@@ -8,6 +8,7 @@ use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=ProduitRepository::class)
@@ -47,37 +48,46 @@ class Produit
     private $commentaires;
 
     /**
-     * @ORM\OneToMany(targetEntity=Quantite::class, mappedBy="produit",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit",cascade={"persist"})
      *  @Assert\Valid())
      */
-    private $quantites;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="produit",cascade={"persist"})
-     *  @Assert\Valid()
-     */
     private $images;
 
     /**
-     * @ORM\OneToMany(targetEntity=Recette::class, mappedBy="produit", orphanRemoval=true, cascade={"persist"})
-     *  @Assert\Valid()
+     * @ORM\OneToMany(targetEntity=Recette::class, mappedBy="produit", orphanRemoval=true,cascade="all")
      */
     private $recettes;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProduitsOnMenu::class, mappedBy="produit",cascade="all")
+     * @ORM\OneToMany(targetEntity=ProduitsOnMenu::class, mappedBy="produit",cascade={"persist"})
      */
-    private $produitsOnMenus;
+    private $produitsOnMenu;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommandeProducts::class, mappedBy="produit",cascade={"persist"})
+     */
+    private $commandes;
+
+    /**
+     * @Gedmo\Slug(fields={"produitLibelle"})
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
 
 
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
-        $this->quantites = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->recettes = new ArrayCollection();
-        $this->produitsDuMenus = new ArrayCollection();
-        $this->produitsOnMenus = new ArrayCollection();
+        $this->produitsOnMenu = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
     public function __toString()
     {
@@ -167,35 +177,6 @@ class Produit
         return $this;
     }
 
-    /**
-     * @return Collection|Quantite[]
-     */
-    public function getQuantites(): Collection
-    {
-        return $this->quantites;
-    }
-
-    public function addQuantite(Quantite $quantite): self
-    {
-        if (!$this->quantites->contains($quantite)) {
-            $this->quantites[] = $quantite;
-            $quantite->setProduit($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuantite(Quantite $quantite): self
-    {
-        if ($this->quantites->removeElement($quantite)) {
-            // set the owning side to null (unless already changed)
-            if ($quantite->getProduit() === $this) {
-                $quantite->setProduit(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Image[]
@@ -259,15 +240,15 @@ class Produit
     /**
      * @return Collection|ProduitsOnMenu[]
      */
-    public function getProduitsOnMenus(): Collection
+    public function getProduitsOnMenu(): Collection
     {
-        return $this->produitsOnMenus;
+        return $this->produitsOnMenu;
     }
 
     public function addProduitsOnMenu(ProduitsOnMenu $produitsOnMenu): self
     {
-        if (!$this->produitsOnMenus->contains($produitsOnMenu)) {
-            $this->produitsOnMenus[] = $produitsOnMenu;
+        if (!$this->produitsOnMenu->contains($produitsOnMenu)) {
+            $this->produitsOnMenu[] = $produitsOnMenu;
             $produitsOnMenu->setProduit($this);
         }
 
@@ -276,12 +257,59 @@ class Produit
 
     public function removeProduitsOnMenu(ProduitsOnMenu $produitsOnMenu): self
     {
-        if ($this->produitsOnMenus->removeElement($produitsOnMenu)) {
+        if ($this->produitsOnMenu->removeElement($produitsOnMenu)) {
             // set the owning side to null (unless already changed)
             if ($produitsOnMenu->getProduit() === $this) {
                 $produitsOnMenu->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommandeProducts[]
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(CommandeProducts $commande): self
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
+            $commande->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(CommandeProducts $commande): self
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getProduit() === $this) {
+                $commande->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

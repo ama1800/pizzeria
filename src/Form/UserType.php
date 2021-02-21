@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -28,7 +29,6 @@ class UserType extends AbstractType
                     ])
                 ]
             ])
-            // ->add('password', PasswordType::class)
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les deux mots de passes doivent etre identiques!',
@@ -54,6 +54,13 @@ class UserType extends AbstractType
                     'MONSIEUR' =>  '1',
                     'MADAME' =>  '0',
                 ],
+            ])
+            ->add('telephone', TelType::class, [
+                'label' => 'N° téléphone',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                ]
             ])
             ->add('cp', TextType::class)
             ->add('ville', TextType::class)

@@ -35,7 +35,7 @@ class Ingredient
     private $disponible;
 
     /**
-     * @ORM\OneToMany(targetEntity=Recette::class, mappedBy="Ingredient")
+     * @ORM\OneToMany(targetEntity=Recette::class, mappedBy="Ingredient",cascade="all")
      */
     private $recettes;
 

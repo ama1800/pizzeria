@@ -1,3 +1,17 @@
+@media screen and (max-width: 320px) {
+.delivry{
+    top: 36% !important;
+    right: 52% !important;
+}
+.panier{
+    top: 4% !important;
+    right: 13% !important;
+}
+.adresse-cordonnees {
+    display: block;
+    text-align: center;
+}
+}
 /* CSS pour les appareils mobile moins de 640px */
 @media screen and (max-width: 640px) {
 
@@ -12,13 +26,18 @@ header img{
     font-family: monospace;
 }
 .delivry{
-    margin-top: 11.7%;
+    top: 25%;
+    right: 50%;
 }
 .delivry img{
     display: none;
 }
+.delivry a{
+    margin: 0 5%;
+}
 .panier{
-    top: 50%;
+    top: 19%;
+    right: 20%;
 }
 .user{
     left: 40%;
@@ -61,7 +80,7 @@ a{
 }
 /* coté droit caché */
 .right{
-    display: none;
+    display: none !important;
 }
 /* coté gauche */
 #wrapper{
@@ -78,7 +97,7 @@ z-index: 1;
 top: 2%;
 right: 5%;
 }
-.contact #send1{
+.contact #contact_envoyer{
     width: 40%;
 }
 .temoignages h2 {
@@ -121,9 +140,10 @@ right: 5%;
 }
 #map {
     height: 200px;
+    width: unset !important;
 }
 }
-/* CSS pour les appareils mobile plus de 768px */
+/* CSS pour les appareils mobile plus de 768px max 1025px */
 @media screen and (max-width: 1025px) {
     #headdown{
         font-size: 10px;
@@ -131,4 +151,18 @@ right: 5%;
     .close{
     font-size: xxx-large;
     }
+}
+
+
+
+/* CSS Facture pour les appareils mobile moins de 768px */
+@media (min-width: 768px) {
+    .col-md {
+        -ms-flex-preferred-size: 0;
+        flex-basis: 0;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+
 }

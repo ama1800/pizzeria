@@ -2,42 +2,39 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\Commentaire;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class CommentaireType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('user', EntityType::class, [
-            //     'class' => User::class,
-            //     'choice_label' => function ($user){
-            //         return $user->getPrenom();
-            //     }
-            // ])
-            ->add('contenu', TextType::class, [
+            ->add('contenu', TextareaType::class, [
                 'label' => 'Votre Commentaire',
                 'attr' => [
                     'class' => 'form-control',
                 ]
             ])
-            ->add('note', NumberType::class, [
-                'label' => 'Votre Note de 0 à 5.',
-                'attr' => [
-                    'class' => 'form-control',
-                ]
+            ->add('note', ChoiceType::class, [
+                'choices' => range(0, 5),
             ])
-            ->add('rgpd', CheckboxType::class)
+            ->add('rgpd', CheckboxType::class, [
+                'label' => 'Accepter les terms d\'utilisation.',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Merci d\'accepter les terms'
+                    ])
+                ],
+            ])
             ->add('parentId', HiddenType::class, [
                 'mapped' => false
             ])

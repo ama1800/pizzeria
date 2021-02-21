@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FactureController!{% endblock %}
+
+{% block body %}
+
+<h1>Les Factures</h1>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Facture</th>
+            <th>Client</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="table-light">
+        {% for facture in factures %}
+        <tr>
+            <td><a href="{{ path('show_facture', {'numero' : facture.numero}) }}">{{ facture.numero }}</a>
+            </td>
+            <td>{{ facture.commande.user.nom }} {{ facture.commande.user.prenom }}</td>
+            <td>{{ facture.createdAt|date('d-m-Y H:m') }}</td>
+            <td>
+                <a href="{{ path('show_facture', {'numero' : facture.numero}) }}">Afficher</a>
+                <a href="{{ path('pdf_facture', {'numero' : facture.numero}) }}">Télécharger</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block stylesheets %}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
         integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
@@ -39,8 +39,10 @@
                 </div>
                 <!-- le panier de la commande -->
                 <div class="panier">
-                    <a href="" class="liens"><img src="{{ asset('img/panier.png') }}" alt="img" class="down"><br><span
-                            class="font-effect-neon">LE PANIER</span></a>
+                    <a href="{{ path('commande') }}" class="liens"><img src="{{ asset('img/panier.png') }}" alt="img"
+                            class="down">
+                        <span id="panierCount">{{ nb }}</span>
+                        <br><span class="font-effect-neon">LE PANIER</span></a>
                 </div>
                 <!-- espace utilisateur -->
                 <div class="user">
@@ -53,8 +55,19 @@
                     </div>
                     {% else %}
                     <div class="on">
+                        {% if is_granted("ROLE_GERANT") %}
+                        <a href="{{path('admin')}}" class="links"><img src="{{ asset('img/admin.png') }}" alt="img"
+                                class="up"></a>
+                        {% endif %}
+                        <!-- Profile edit 2 façon user_edit (role super admin) profile_edit (tous users) -->
+                        {% if is_granted("ROLE_SUPER_ADMIN") %}
                         <a href="{{path('user_show',{'id': app.user.Id})}}" class="links"><img
                                 src="{{ asset('img/profile.jpg') }}" alt="img" class="up"></a>
+                        {% else %}
+                        <!-- page qui permet consultation et modification du profile -->
+                        <a href="{{path('profile',{'id': app.user.Id})}}" class="links"><img
+                                src="{{ asset('img/profile.jpg') }}" alt="img" class="up"></a>
+                        {% endif %}
                         <a href="{{path('app_logout')}}" class="links"><img src="{{ asset('img/deconnexion.png') }}"
                                 alt="img" class="up"></a>
                     </div>
@@ -68,7 +81,7 @@
                 <a href="" class="liens"><img src="{{ asset('img/cart.png') }}" alt="img" class="down"><br><span
                         class="font-effect-emboss">Meilleurs
                         Ventes</span></a>
-                <a href="{{ path('menu_index') }}" class="liens"><img src="{{ asset('img/menu1.png') }}" alt="img"
+                <a href="{{ path('menus') }}" class="liens"><img src="{{ asset('img/menu1.png') }}" alt="img"
                         class="down"><br><span class="font-effect-emboss">MENUS</span></a>
                 <a href="{{ path('pizzas') }}" class="liens"><img
                         src="{{ asset('img/pizza-fast-food-bake-bread-128.png') }}" alt="img" class="down"><br><span
@@ -160,7 +173,7 @@
                                 </div>
                                 <div>
                                     Tel. <a href="tel:+33951735430">09 51 73 54 30</a><br>
-                                    <a href="mailto:colmar@elan-formation.fr">email@host.fr</a>
+                                    <a href="mailto:email@host.fr">email@host.fr</a>
                                 </div>
                             </div>
                             <div id="map"></div>
@@ -408,26 +421,28 @@
                 </div>
                 <div class="contact">
                     <h2>NOUS CONTACTER!</h2>
-                    <form action="#">
-                        <div id="formulaire">
-                            <div>
-                                <label class="obligatoire" for="nom">VOTRE NOM</label><br>
-                                <input type="text" id="nom" name="nom" value="" required><br><br>
-                                <label class="obligatoire" for="email">VOTRE EMAIL</label><br>
-                                <input type="email" id="email" name="email" value="" required><br><br>
-                                <label for="phone"></label>N° TELEPHONE<br>
-                                <input type="tel" id="phone" name="phone" value="" placeholder="0600000000"
-                                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"><br><br>
-                            </div>
-                            <div>
-                                <label for="sujet">SUJET</label><br>
-                                <input type="text" id="sujet" name="sujet" value=""><br><br>
-                                <label class="obligatoire" for="message">MESSAGE</label><br>
-                                <textarea id="message" name="message" required></textarea><br><br>
+                    {{ form_start(form) }}
+                    <div id="formulaire">
+                        <div>
+                            <label class="obligatoire" for="nom">VOTRE NOM</label><br>
+                            {{ form_widget(form.nom) }}<br><br>
+                            <label class="obligatoire" for="email">VOTRE EMAIL</label><br>
+                            {{ form_row(form.email) }}<br><br>
+                            <label for="phone"></label>N° TELEPHONE<br>
+                            {{ form_row(form.telephone) }}<br><br>
+                        </div>
+                        <div>
+                            <label class="obligatoire" for="sujet">SUJET</label><br>
+                            {{ form_row(form.sujet) }}<br><br>
+                            <label class="obligatoire" for="message">MESSAGE</label><br>
+                            {{ form_row(form.message) }}<br><br>
+                            <div id="rgpd">
+                                <label class="obligatoire" for="rgpd">Accepter les terms d'utilisation</label><br>
+                                {{ form_row(form.rgpd) }}
                             </div>
                         </div>
-                        <input id="send1" type="submit" value="ENVOYER">
-                    </form>
+                    </div>
+                    {{ form_end(form) }}
                 </div>
             </section>
         </div>
@@ -456,11 +471,11 @@
                 <img id="centre" src="{{ asset('img/phone.png') }}" alt="img">
             </div>
             <div class="droite">
-                <img src="{{ asset('img/cal.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/twi.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/fcb.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/ins.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/sna.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/cal.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/twi.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/fcb.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/ins.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/sna.png') }}" alt="img" class="socialm">
             </div>
         </div>
         <p>Conformément aux articles 12 à 22 du Règlement (UE) 2016/679 (RGPD), Vous disposez d'un droit d'accès, de

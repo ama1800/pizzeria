@@ -25,16 +25,20 @@
                 <tr>
                     <td><a href="{{ path('user_show', {'id': user.id}) }}">{{ user.nom }} {{ user.prenom }}</a></td>
                     <td>
+                        {% if user.roles[0] is defined %}
                         {% if user.roles[0] == "ROLE_EMPLOYE" %}
-                        <span style="color: grey">EMPLOYE </span>
+                        <span style="color: goldenrod">EMPLOYE </span>
                         {% elseif user.roles[0] == "ROLE_GERANT" %}
                         <span style="color: green">GERANT</span>
                         {% elseif user.roles[0] == "ROLE_ADMIN" %}
-                        <span style="color: red">ADMINISTRATEUR </span>
+                        <span style="color: red">ADMIN </span>
                         {% elseif user.roles[0] == "ROLE_SUPER_ADMIN" %}
                         <span style="color: brown">SUP_ADMIN </span>
                         {% else %}
-                        <span style="color: black">UTILISATEUR </span>
+                        <span style="color: gray">UTILISATEUR </span>
+                        {% endif %}
+                        {% else %}
+                        <span style="color: grey">UTILISATEUR </span>
                         {# {% else %}
                         {{ user.roles ? role : '' }} #}
                         {% endif %}
@@ -46,7 +50,7 @@
                     </td>
                     <td>
                         <a href="{{ path('user_show', {'id': user.id}) }}">profile</a>
-                        <a href="{{ path('user_edit', {'id': user.id}) }}">modifier</a>
+                        <a href="{{ path('profile_edit', {'id': user.id}) }}">modifier</a>
                         {{ include('user/_delete_form.html.twig') }}
                     </td>
                 </tr>

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Facture{% endblock %}
+
+{% block body %}
+<h2>Payement réussi. Merci pour votre confiance</h2>
+<div class="resumePanier">
+        <ul class="list-group">
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <p style="width: 25%;">Produit</p>
+                        <span class="badge badge-primary badge-pill">Quantité</span>
+                        <span class="badge badge-primary badge-pill">Prix</span>
+                        <span class="badge badge-primary badge-pill">Total</span>
+                </li>
+        </ul>
+        <ul class="list-group">
+                {% for produit in panier %}
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <p style="width: 25%;">{{ produit.produit.produitLibelle }}</p>
+                        <span class="badge badge-primary badge-pill">{{ produit.quantite }}</span>
+                        <span class="badge badge-primary badge-pill">{{ produit.produit.produitPrix }}€</span>
+                        <span class="badge badge-primary badge-pill">{{ produit.produit.produitPrix * produit.quantite
+                                }}€</span>
+                </li>
+                {% endfor %}
+        </ul>
+        <div class="list-group active">
+                <span colspan="3" class="text-right">Total à payer : <span class="badge badge-primary badge-pill"> {{
+                                total
+                                }}€</span></span>
+        </div>
+</div>
+<span class="text-success">Consulter et telecharger vos Factures <a name="" id="" class="btn btn-success"
+                href="{{ path('user_factures') }}" role="button">ICI</a></span>
+{% if panier | length > 0 %}
+{{ destroy }}
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

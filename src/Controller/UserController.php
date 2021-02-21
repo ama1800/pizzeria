@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\ResetPassType;
+use App\Form\AdminEditUserType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,7 @@ class UserController extends AbstractController
 {
 
     /**
+     * @isGranted("ROLE_ADMIN") 
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index(UserRepository $userRepository): Response
@@ -200,6 +202,7 @@ class UserController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMIN") 
      * @Route("/{id}", name="user_show", methods={"GET"})
      */
     public function show(User $user): Response
@@ -210,11 +213,13 @@ class UserController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMIN") 
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $encoder, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $role = $this->getUser()->getRoles();
+        $form = $this->createForm(AdminEditUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -251,7 +256,6 @@ class UserController extends AbstractController
             $this->addFlash('success', 'Compte Mise à jour avec succes.');
             return $this->redirectToRoute('home');
         }
-
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,

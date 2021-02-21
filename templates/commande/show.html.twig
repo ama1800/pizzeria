@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ commande.payementId }}{% endblock %}
+
+{% block body %}
+<h1 class="text-warning">{{ commande.nom }} {{ commande.prenom }}</h1>
+<div class="card border-info mb-3" style="max-width: 80%; margin: auto; padding: 2em;">
+    <div style="max-width: 100%;">
+        <div class="card-header text-danger">N°: {{ commande.id }}<br>
+        </div>
+        <div class="card-body text-success">
+            Tel. <a href="tel:{{ commande.telephone }}">{{ commande.telephone }}</a><br>
+            <p class="card-text">ADRESSE : <br>{{ commande.adresseLivraison }}</p>
+            <h6>
+                <a href="mailto:{{commande.email}}">{{commande.email}}</a>
+            </h6>
+        </div>
+    </div>
+    <div>
+        <h6>Liste de produits:</h6>
+        <table class="table-bordered">
+            <thead class="table-active">
+                <tr>
+                    <th>Produit Commandé</th>
+                    <th>Quantité</th>
+                </tr>
+            </thead>
+
+            <tbody class="table-light">
+                {% for produit in commande.produits %}
+                <tr>
+                    <td>
+                        <a class="breadcrumb-item" href="{{ path('produit_show', {'id': produit.produit.id}) }}">{{
+                            produit.produit.produitLibelle }}</a>
+                    </td>
+                    <td>
+                        {{ produit.qte }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <a href="{{ path('commande_list') }}" class="btn btn-outline-primary">Liste commandes</a>
+    </div>
+</div>
+</div><br><br>
+{% endblock %}

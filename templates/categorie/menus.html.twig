@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token('submit-item') }}">
+{% endblock %}
+
+{% block title %}MENUS{% endblock %}
+
+{% block body %}
+
+<h2 class="menus">Les Menus</h2>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Menu</th>
+            <th>Disponible</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Image</th>
+            <th>Contenu</th>
+        </tr>
+    </thead>
+    {% for menu in menus %}
+    <tbody class="table-light">
+        <tr>
+            <td><a href="{{ path('menu_show', {'id': menu.id}) }}">{{ menu.Libelle }}</a></td>
+            <td>{{ menu.disponible ? 'Oui' : 'Non' }}</td>
+            {% set prix = 0 %}
+            {% for menu in menu.produitsOnMenu %}
+            {% if menu.produit.ProduitPrix is defined %}
+            {% set prix = prix + menu.produit.ProduitPrix %}
+            {% if loop.last %}
+            <td>{{ prix }}€</td>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            <td class="border-0 align-middle">
+                {% if menu.disponible == 'Oui' %}<span data-menu="{{ menu.id }}" type="submit" id="ajouter"><i
+                        style=" position:relative" class="fa fa-cart-plus fa-2x"></i></span>
+                <select name="qtyMenu" id="qtyMenu" data-menu="{{ menu.id }}" class="custom-select">
+                    {% for i in 0..6 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                {% endif %}
+            </td>
+            <td colspan="{{ loop.length }}">
+                <ul class="list-group">
+                    {% for menu in menu.produitsOnMenu %}
+                    <a href="{{ path('produit_show', {'id': menu.produit.id}) }}">
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            data-menuOfProduit="{{ menu.menu.id }}" data-id="{{menu.produit.id}}" id="produit">{{
+                            menu.produit.produitLibelle }}
+                            <span class="badge bg-primary rounded-pill">{{ menu.produit.produitPrix }}€</span>
+                        </li>
+                    </a>
+                    <br>
+                    {% endfor %}
+                </ul>
+            </td>
+            <!-- <td>
+                {#% if menu.disponible == 'Oui' %#}
+                <span data-id="{#{ menu.id }#}" id="addMenu"><i style=" position:relative"
+                        class="fa fa-cart-plus fa-2x"></i></span>
+                {#% else %#}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                {#% endif %#}
+            </td> -->
+        </tr>
+    </tbody>
+
+    {% else %}
+    <tr>
+        <td colspan="5">Vide..! Bientot.</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/updateMenu.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

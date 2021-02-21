@@ -6,6 +6,7 @@
 <h2>Images</h2>
 {% for image in produit.images %}
 <div>
+    <!-- affiche les images existantes -->
     <img src="{{ asset('/uploads/'~ image.url) }}" alt="" width="150">
 
     {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
@@ -14,5 +15,5 @@
 </div>
 {% endfor %}
 {% endif %}
-<button class="btn">{{ button_label|default('Save') }}</button>
+<button class="btn btn-primary">{{ button_label|default('Sauvegarder') }}</button>
 {{ form_end(form) }}

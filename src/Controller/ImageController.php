@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-/**
+/** 
+ * @isGranted("ROLE_GERANT")
  * @Route("/image")
  */
 class ImageController extends AbstractController
@@ -28,7 +30,8 @@ class ImageController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * ** @isGranted("ROLE_GERANT")
      * @Route("/new", name="image_new", methods={"GET","POST"})
      */
     public function new(Request $request, SluggerInterface $slugger): Response
@@ -88,7 +91,8 @@ class ImageController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * ** @isGranted("ROLE_GERANT")
      * @Route("/{id}/edit", name="image_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Image $image, SluggerInterface $slugger): Response
@@ -135,7 +139,8 @@ class ImageController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * ** @isGranted("ROLE_GERANT")
      * @Route("/{id}", name="image_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Image $image): Response

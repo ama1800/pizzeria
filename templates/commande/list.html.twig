@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FactureController!{% endblock %}
+
+{% block body %}
+
+<h1>Les Commandes</h1>
+<div class="pagination">
+    {{ knp_pagination_render(commandes) }}
+</div>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Client</th>
+            <th>Date</th>
+            <th>Adresse De Livraison</th>
+            <th>Phone</th>
+            <th>Mail</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="table-light">
+        {% for commande in commandes %}
+        <tr>
+            <td>{{ commande.nom }} {{ commande.prenom }}</td>
+            <td>{{ commande.creatAt|date('d-m-Y H:m') }}</td>
+            <td>{{ commande.adresseLivraison }}</td>
+            <td>{{ commande.telephone }}</td>
+            <td>{{ commande.email }}</td>
+            <td>{{ commande.montantTtc }}€</td>
+            <td>
+                <a class="breadcrumb-item" href="{{ path('commande_show', {'id': commande.id}) }}">Afficher</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3">Aucune commande..!</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="navigation">
+    {{ knp_pagination_render(commandes) }}
+</div>
+{% endblock %}

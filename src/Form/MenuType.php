@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class MenuType extends AbstractType
@@ -19,15 +20,23 @@ class MenuType extends AbstractType
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
 
-                foreach ($event->getData()->getProduitsDuMenus() as $produit) {
-                    $produit->addMenu($event->getData());
+                foreach ($event->getData()->getProduitsOnMenu() as $produit) {
+                    $produit->setMenu($event->getData());
                 }
             }
         );
         $builder
             ->add('libelle', TextType::class)
-            ->add('prix', NumberType::class, [
-                'scale' => 2, // spécifie nombres de chiffre apres  La virgule.
+            // ->add('prix', NumberType::class, [
+            //     'scale' => 2, // spécifie nombres de chiffre apres  La virgule.
+            // ])
+            ->add('disponible', ChoiceType::class, [
+                'required' => true,
+                'attr' => ['class' => 'selectpicker',],
+                'choices'  => [
+                    'OUI' =>  '1',
+                    'NON' =>  '0',
+                ],
             ]);
     }
 

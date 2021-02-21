@@ -71,7 +71,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Veuillez insérez un identifiant et mot de passe valident!.');
+            throw new CustomUserMessageAuthenticationException('Veuillez insérez un identifiant et mot de passe valides!.');
         }
 
         return $user;

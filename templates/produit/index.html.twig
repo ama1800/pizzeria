@@ -4,361 +4,405 @@
 
 {% block body %}
 
-<a href="{{ path('produit_new') }}">Ajouter Produit </a>
-<h2>Les Pizzas</h2>
-<table class="table table-hover">
-    <thead class="table-active">
-        <tr>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'PIZZAS' %}
-    <tbody class="table-light">
-        <tr>
-            <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
-        </tr>
-    </tbody>
+<button><a href="{{ path('produit_new') }}">Ajouter Produit </a></button>
 
-    {% endif %}
+<h2 class="accordion">Les Pizzas</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'PIZZAS' %}
+        <tbody class="table-light">
+            <tr>
+                <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt=""></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les Boissons</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
+        {% endif %}
+
+        {% else %}
         <tr>
-            <th>Id</th>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
+            <td colspan="5">no records found</td>
         </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'BOISSONS' %}
-    <tbody class="table-light">
+        {% endfor %}
+    </table>
+</div>
+
+<h2 class="accordion">Les Boissons</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>Id</th>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'BOISSONS' %}
+        <tbody class="table-light">
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.produitLibelle }}</td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
+
+        {% endif %}
+
+        {% else %}
         <tr>
-            <td>{{ produit.id }}</td>
-            <td>{{ produit.produitLibelle }}</td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
+            <td colspan="5">no records found</td>
         </tr>
-    </tbody>
+        {% endfor %}
+    </table>
+</div>
 
-    {% endif %}
+<h2 class="accordion">Les DESSERTS</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'DESSERTS' %}
+        <tbody class="table-light">
+            <tr>
+                <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les DESSERTS</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
+        {% endif %}
+
+        {% else %}
         <tr>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
+            <td colspan="5">no records found</td>
         </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'DESSERTS' %}
-    <tbody class="table-light">
+        {% endfor %}
+    </table>
+</div>
+
+<h2 class="accordion">Les SALADES</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>Id</th>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'SALADES' %}
+        <tbody class="table-light">
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.produitLibelle }}</td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
+
+        {% endif %}
+
+        {% else %}
         <tr>
-            <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
+            <td colspan="5">no records found</td>
         </tr>
-    </tbody>
+        {% endfor %}
+    </table>
+</div>
 
-    {% endif %}
+<h2 class="accordion">Les TACOS</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'TACOS' %}
+        <tbody class="table-light">
+            <tr>
+                <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les SALADES</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
+        {% endif %}
+
+        {% else %}
         <tr>
-            <th>Id</th>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
+            <td colspan="5">no records found</td>
         </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'SALADES' %}
-    <tbody class="table-light">
+        {% endfor %}
+    </table>
+</div>
+
+<h2 class="accordion">Les SAUCES</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>Id</th>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'SAUCES' %}
+        <tbody class="table-light">
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.produitLibelle }}</td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
+
+        {% endif %}
+
+        {% else %}
         <tr>
-            <td>{{ produit.id }}</td>
-            <td>{{ produit.produitLibelle }}</td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
+            <td colspan="5">no records found</td>
         </tr>
-    </tbody>
+        {% endfor %}
+    </table>
+</div>
 
-    {% endif %}
+<h2 class="accordion">Les EXTRAS</h2>
+<div class="panel">
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>ProduitLibelle</th>
+                <th>ProduitPrix</th>
+                <th>Disponible</th>
+                <th>Image</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        {% for produit in produits %}
+        {% if produit.categorie.categorieLibelle == 'EXTRAS' %}
+        <tbody class="table-light">
+            <tr>
+                <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
+                <td>{{ produit.ProduitPrix }}€</td>
+                <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <div style="display: flex;">
+                        {% for key, image in produit.images %}
+                        {% if key == 0 %}
+                        <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                                src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
+                        <br>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
+                    <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
+                    {{ include('produit/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        </tbody>
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les TACOS</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
+        {% endif %}
+
+        {% else %}
         <tr>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
+            <td colspan="5">no records found</td>
         </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'TACOS' %}
-    <tbody class="table-light">
-        <tr>
-            <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
-        </tr>
-    </tbody>
+        {% endfor %}
+    </table>
+</div>
 
-    {% endif %}
+<h2 class="accordion">Les Menus</h2>
+<div class="panel">
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les SAUCES</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
-        <tr>
-            <th>Id</th>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'SAUCES' %}
-    <tbody class="table-light">
-        <tr>
-            <td>{{ produit.id }}</td>
-            <td>{{ produit.produitLibelle }}</td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
-        </tr>
-    </tbody>
+    <a href="{{ path('menu_new') }}">
+        <h5>Ajouter</h5>
+    </a>
+    <table class="table table-hover">
+        <thead class="table-active">
+            <tr>
+                <th>Libelle</th>
+                <th>Prix</th>
+                <th>contenu</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            {% for menu in menus %}
+            <tr>
+                <td><a href="{{ path('menu_show', {'id': menu.id}) }}">{{ menu.Libelle }}</a></td>
+                <td>{{ menu.prix }}€</td>
+                <td>
+                    <div style="display: flex;">
+                        <ul class="list-group">
+                            {% for produit in menu.produitsOnMenu %}
+                            <a href="{{ path('produit_show', {'id': produit.produit.id}) }}">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">{{
+                                    produit.produit.produitLibelle }}
+                                    <span class="badge bg-primary rounded-pill">{{ produit.produit.produitPrix
+                                        }}€</span>
+                                </li>
+                            </a>
+                            <br>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ path('menu_show', {'id': menu.id}) }}">Détails</a>
+                    <a href="{{ path('menu_edit', {'id': menu.id}) }}">Modifier</a>
+                    {{ include('menu/_delete_form.html.twig') }}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-    {% endif %}
+{% endblock %}
 
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les EXTRAS</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
-        <tr>
-            <th>ProduitLibelle</th>
-            <th>ProduitPrix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    {% for produit in produits %}
-    {% if produit.categorie.categorieLibelle == 'EXTRAS' %}
-    <tbody class="table-light">
-        <tr>
-            <td><a href="{{ path('produit_show', {'id': produit.id}) }}">{{ produit.produitLibelle }}</a></td>
-            <td>{{ produit.ProduitPrix }}€</td>
-            <td>{{ produit.disponible ? 'Oui' : 'Non' }}</td>
-            <td>
-                <div style="display: flex;">
-                    {% for key, image in produit.images %}
-                    {% if key == 0 %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </td>
-            <td>
-                <a href="{{ path('produit_show', {'id': produit.id}) }}">Voir</a>
-                <a href="{{ path('produit_edit', {'id': produit.id}) }}">Modifier</a>
-                {{ include('produit/_delete_form.html.twig') }}
-            </td>
-        </tr>
-    </tbody>
-
-    {% endif %}
-
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-<h2>Les MENUS</h2>
-<table class="table table-hover">>
-    <thead class="table-active">
-        <tr>
-            <th>Id</th>
-            <th>Menu</th>
-            <th>Prix</th>
-            <th>Disponible</th>
-            <th>Image</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    {% for menu in menus %}
-    <tbody class="table-light">
-        <tr>
-            <td>{{ menu.id }}</td>
-            <td>{{ menu.libelle }}</td>
-            <td>{{ menu.prix }}€</td>
-            <td>{{ menu.disponible ? 'Oui' : 'Non' }}</td>
-            <td>?</td>
-            <td>
-                <a href="{{ path('menu_show', {'id': menu.id}) }}">Voir</a>
-                <a href="{{ path('menu_edit', {'id': menu.id}) }}">Modifier</a>
-                <a href="{{ path('menu_delete', {'id': menu.id}) }}">Suprimer</a>
-            </td>
-        </tr>
-    </tbody>
-
-    {% else %}
-    <tr>
-        <td colspan="5">no records found</td>
-    </tr>
-    {% endfor %}
-</table>
-
+{% block javascripts %}
+{{ parent() }}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}

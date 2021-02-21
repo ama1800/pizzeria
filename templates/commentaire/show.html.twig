@@ -3,40 +3,82 @@
 {% block title %}Commentaire{% endblock %}
 
 {% block body %}
-    <h1>Commentaire</h1>
+<h1>Commentaire</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ commentaire.id }}</td>
-            </tr>
-            <tr>
-                <th>CommentAt</th>
-                <td>{{ commentaire.commentAt ? commentaire.commentAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Contenu</th>
-                <td>{{ commentaire.contenu }}</td>
-            </tr>
-            <tr>
-                <th>Note</th>
-                <td>{{ commentaire.note }}</td>
-            </tr>
-            <tr>
-                <th>Visible</th>
-                <td>{{ commentaire.visible ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Rgpd</th>
-                <td>{{ commentaire.rgpd ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ commentaire.id }}</td>
+        </tr>
+        <tr>
+            <th>CommentAt</th>
+            <td>{{ commentaire.commentAt ? commentaire.commentAt|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Contenu</th>
+            <td>{{ commentaire.contenu }}</td>
+        </tr>
+        <tr>
+            <th>Note</th>
+            <td>{{ commentaire.note }}</td>
+        </tr>
+        <tr>
+            <th>Visible</th>
+            <td>{{ commentaire.visible ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+            <th>Rgpd</th>
+            <td>{{ commentaire.rgpd ? 'Yes' : 'No' }}</td>
+        </tr>
+    </tbody>
+</table>
+<a href="{{ path('commentaire_index') }}">commentaires</a>
 
-    <a href="{{ path('commentaire_index') }}">back to list</a>
+<a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}">Modifier</a>
 
-    <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}">edit</a>
+{{ include('commentaire/_delete_form.html.twig') }}
 
-    {{ include('commentaire/_delete_form.html.twig') }}
+
+<h1>Reponses</h1>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Reponse</th>
+            <th>Auteur</th>
+            <th>Note</th>
+            <th>Visible</th>
+            <th>Date</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody class="table-light">
+        {% for commentaire in commentaires %}
+        <tr>
+            <td>{{ commentaire.produit.produitLibelle }}</td>
+            <td>{{ commentaire.contenu }}</td>
+            <td>{{ commentaire.note }}</td>
+            <td>
+                {% if commentaire.visible == 0 %}
+                <a class="btn btn-outline-success"
+                    href="{{ path('commentaire_activer', {'id': commentaire.id}) }}">Activer</a>
+                {% else %}
+                <a class="btn btn-outline-danger"
+                    href="{{ path('commentaire_desactiver', {'id': commentaire.id}) }}">Désactiver</a>
+                {% endif %}
+            </td>
+            <td>{{ commentaire.commentAt ? commentaire.commentAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('commentaire_show', {'id': commentaire.id}) }}">Afficher</a>
+                <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}">Modifier</a>
+                {{ include('commentaire/_delete_form.html.twig') }}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="text-info">Nombre de commentaires: 0.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

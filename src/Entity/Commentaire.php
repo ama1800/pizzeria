@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentaireRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=CommentaireRepository::class)
@@ -22,6 +23,9 @@ class Commentaire
     private $id;
 
     /**
+     * @var \DateTime $createdAt
+     * 
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private $commentAt;
@@ -56,13 +60,13 @@ class Commentaire
     /**
      * @ORM\Column(type="boolean")
      */
-    private $visible = false; // false pas défaut que permettre de les modérer.
+    private $visible = false; // false pas défaut pour permettre de les modérer.
 
 
     /**
      * @ORM\ManyToOne(targetEntity=Commentaire::class, inversedBy="reponses")
      */
-    private $parent;
+    private $parent; //pour pouvoir répondre au commentaire en ajoutant cette relation avec l'entité elle meme
 
     /**
      * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="parent")
@@ -88,13 +92,6 @@ class Commentaire
     public function getCommentAt(): ?\DateTimeInterface
     {
         return $this->commentAt;
-    }
-
-    public function setCommentAt(\DateTimeInterface $commentAt): self
-    {
-        $this->commentAt = $commentAt;
-
-        return $this;
     }
 
     public function getContenu(): ?string

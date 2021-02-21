@@ -9,8 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
+/** 
+ *  @isGranted("ROLE_GERANT")
  * @Route("/produits/on/menu")
  */
 class ProduitsOnMenuController extends AbstractController
@@ -83,7 +85,7 @@ class ProduitsOnMenuController extends AbstractController
      */
     public function delete(Request $request, ProduitsOnMenu $produitsOnMenu): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$produitsOnMenu->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $produitsOnMenu->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($produitsOnMenu);
             $entityManager->flush();

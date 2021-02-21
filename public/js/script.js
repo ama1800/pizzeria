@@ -50,78 +50,116 @@ function showSlides(n) {
   captionText.innerHTML = dots[slideIndex - 1].alt;
 }
 /* accordion */
+
 var acc = document.getElementsByClassName("accordion");
-for (let i = 0; i < acc.length; i++) {
+for (i = 0; i < acc.length; i++) {
   acc[i].addEventListener("click", function () {
-    this.classList.toggle("actuel");
-    var text = this.nextElementSibling;
-    if (text.style.display === "block") {
-      text.style.display = "none";
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display == "block") {
+      panel.style.display = "none";
     } else {
-      text.style.display = "block";
+      panel.style.display = "block";
     }
   });
-
-
-  /* ZipCode */
-
-  $(document).ready(function () {
-    const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
-    const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
-    const format = "&format=json"
-    let nom = "";
-    let cp = $('#user_cp')
-    let ville = $('#user_commune')
-    let adresse = $('#user_adresse')
-    let adresses = $('#adresses')
-    $(cp).on('blur', function () {
-      let code = $(this).val()
-      let url = comUrl + code + format
-      console.log(url)
-      fetch(
-        url,
-        { method: 'get' }).then(response => response.json()).then(results => {
-          // console.log(results)
-          if (results.length) {
-            $.each(results, function (k, v) {
-              // console.log(v)
-              // console.log(v.nom)
-              $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
-            })
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-    })
-
-    /** Adresse */
-    $(adresse).on('keypress', function () {
-      let code = $(cp).val()
-      let nom = $(this).val().split(' ')
-      let part = ""
-      for (let i = 0; i < nom.length; i++) {
-        part += nom[i] + '+'
-        if (part.length >= 1) {
-          let urlAdresse = adressUrl + part + "&postcode=" + code + format
-          console.log(urlAdresse)
-          fetch(
-            urlAdresse,
-            { method: 'get' }).then(response => response.json()).then(results => {
-              if (results.features) {
-                let data = results.features
-                data.forEach((adresse) => {
-                  document.querySelector('#adresses').innerHTML += `<option value="${adresse.properties.name}">`
-                })
-              }
-            }).catch(err => {
-              console.log(err)
-            })
-        }
-
-      }
-    })
-  })
 }
+/**panier */
+// payement
+// console.log($(document));
+// $(document).ready(() => {
+//   var pathname = window.location.pathname; // Returns path only (/path/example.html)
+//   // var url      = window.location.href;     // Returns full URL (https://example.com/path/example.html)
+//   // var origin   = window.location.origin;   // Returns base URL (https://example.com)
+//   var payer = $('#payer')
+//   var section = $('.right')
+//   payer.on('click', () => {
+//     if (pathname == '/new') {
+//       section.style.opacity = 0;
+//     }
+//   })
+// })
+
+
+/* ZipCode */
+
+$(document).ready(function () {
+  const comUrl = "https://geo.api.gouv.fr/communes?codePostal="
+  const adressUrl = "https://api-adresse.data.gouv.fr/search/?q="//8+bd+du+port&postcode=44380
+  const format = "&format=json"
+  let nom = "";
+  let cp = $('#user_cp')
+  let ville = $('#user_commune')
+  let adresse = $('#user_adresse')
+  let adresses = $('#adresses')
+  $(cp).on('blur', function () {
+    let code = $(this).val()
+    let url = comUrl + code + format
+    console.log(url)
+    fetch(
+      url,
+      { method: 'get' }).then(response => response.json()).then(results => {
+        // console.log(results)
+        if (results.length) {
+          $.each(results, function (k, v) {
+            // console.log(v)
+            // console.log(v.nom)
+            $(ville).append('<option value="' + v.nom + '">' + v.nom + '</option>')
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+  })
+
+  /** Adresse */
+  $(adresse).on('keypress', function () {
+    let code = $(cp).val()
+    let nom = $(this).val().split(' ')
+    let part = ""
+    for (let i = 0; i < nom.length; i++) {
+      part += nom[i] + '+'
+      if (part.length >= 1) {
+        let urlAdresse = adressUrl + part + "&postcode=" + code + format
+        console.log(urlAdresse)
+        fetch(
+          urlAdresse,
+          { method: 'get' }).then(response => response.json()).then(results => {
+            if (results.features) {
+              let data = results.features
+              data.forEach((adresse) => {
+                document.querySelector('#adresses').innerHTML += `<option value="${adresse.properties.name}">`
+              })
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+      }
+
+    }
+  })
+})
+
+// Plus Moins Produits
+// Plus
+// function onclick(event) {
+//   pmButtonAddOne('productnumberO7N5PQPP01,basketproductnrspanO7N5PQPP01');
+//   updateBtnPrice($('#isidedishselectionformO7N5PQPP01 .sidedish-add-button'), $('#isidedishpriceO7N5PQPP01').val(), 'O7N5PQPP01');
+//   return false;
+// }
+// // Moins
+// function onclick(event) {
+//   pmButtonSubtractOne('productnumberO7N5PQPP01,basketproductnrspanO7N5PQPP01', 1);
+//   updateBtnPrice($('#isidedishselectionformO7N5PQPP01 .sidedish-add-button'), $('#isidedishpriceO7N5PQPP01').val(), 'O7N5PQPP01');
+//   return false;
+// }
+// // button Add
+// function onclick(event) {
+//   $('#isidedishselectionformO7N5PQPP01').submit();
+//   $('#productformpopularO7N5PQPP01 .sidedish-pop-in').trigger('closeandscroll');
+//   return false;
+// }
+
+
 // /** modifier password */
 // let pass = document.getElementById("editPass")
 // let input = document.getElementById("pass")

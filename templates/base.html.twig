@@ -2,23 +2,27 @@
 <html>
 
 <head>
+    {% block meta %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock %}
     <title>{% block title %}
         PIZZA CHICKEN BURGER
         {% endblock %}</title>
     {% block stylesheets %}
+    <link rel="stylesheet" href="https://bootswatch.com/2/superhero/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://bootswatch.com/2/superhero/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/home.css') }}" media="all" id="theme_css">
     <link rel="stylesheet" href="{{ asset('css/mobile.css') }}" media="all" id="themeMob_css">
-    <link rel="icon" href="{{ asset('img/logoClient.png') }}" type="image/x-icon" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
-        integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Audiowide|Sofia&effect=fire|neon|outline|emboss|shadow-multiple|Trirong|Roboto">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/css/axentix.min.css">
+    <link rel="icon" href="{{ asset('img/logoClient.png') }}" type="image/x-icon" />
     {% endblock %}
 </head>
 
@@ -41,8 +45,16 @@
                 </div>
                 <!-- le panier de la commande -->
                 <div class="panier">
-                    <a href="" class="liens"><img src="{{ asset('img/panier.png') }}" alt="img" class="down"><br><span
-                            class="font-effect-neon">LE PANIER</span></a>
+                    <a href="{{ path('commande') }}" class="liens"><img src="{{ asset('img/panier.png') }}" alt="img"
+                            class="down"><span class="badge bg-primary rounded-pill" id="panierCount">
+
+                            {% for id, produit in app.session.get('panier') %}
+                            {% set counter = ( counter | default(0) ) + produit %}
+                            {% if loop.last %}
+                            {{ counter }}
+                            {% endif %}
+                            {% endfor %}
+                        </span><br><span class="font-effect-neon">LE PANIER</span></a>
                 </div>
                 <!-- espace utilisateur -->
                 <div class="user">
@@ -55,8 +67,20 @@
                     </div>
                     {% else %}
                     <div class="on">
+                        <!-- Panel admin (gérant ou plus) -->
+                        {% if is_granted("ROLE_GERANT") %}
+                        <a href="{{path('admin')}}" class="links"><img src="{{ asset('img/admin.png') }}" alt="img"
+                                class="up"></a>
+                        {% endif %}
+                        <!-- Profile edit 2 façon user_edit (role super admin) profile_edit (tous users) -->
+                        {% if is_granted("ROLE_SUPER_ADMIN") %}
                         <a href="{{path('user_show',{'id': app.user.Id})}}" class="links"><img
                                 src="{{ asset('img/profile.jpg') }}" alt="img" class="up"></a>
+                        {% else %}
+                        <!-- page qui permet consultation et modification du profile -->
+                        <a href="{{path('profile',{'id': app.user.Id})}}" class="links"><img
+                                src="{{ asset('img/profile.jpg') }}" alt="img" class="up"></a>
+                        {% endif %}
                         <a href="{{path('app_logout')}}" class="links"><img src="{{ asset('img/deconnexion.png') }}"
                                 alt="img" class="up"></a>
                     </div>
@@ -70,7 +94,7 @@
                 <a href="{{ path('menu_index') }}" class="liens"><img src="{{ asset('img/cart.png') }}" alt="img"
                         class="down"><br><span class="font-effect-emboss">Produits
                         phares</span></a>
-                <a href="{{ path('menu_index') }}" class="liens"><img src="{{ asset('img/menu1.png') }}" alt="img"
+                <a href="{{ path('menus') }}" class="liens"><img src="{{ asset('img/menu1.png') }}" alt="img"
                         class="down"><br><span class="font-effect-emboss">MENUS</span></a>
                 <a href="{{ path('pizzas') }}" class="liens"><img
                         src="{{ asset('img/pizza-fast-food-bake-bread-128.png') }}" alt="img" class="down"><br><span
@@ -158,11 +182,11 @@
                 <img id="centre" src="{{ asset('img/phone.png') }}" alt="img">
             </div>
             <div class="droite">
-                <img src="{{ asset('img/cal.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/twi.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/fcb.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/ins.png') }}" alt="img" class="socialMedia">
-                <img src="{{ asset('img/sna.png') }}" alt="img" class="socialMedia">
+                <img src="{{ asset('img/cal.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/twi.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/fcb.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/ins.png') }}" alt="img" class="socialm">
+                <img src="{{ asset('img/sna.png') }}" alt="img" class="socialm">
             </div>
         </div>
         <p class="edition">©

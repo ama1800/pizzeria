@@ -4,18 +4,21 @@ namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Form\CategorieType;
+use App\Repository\MenuRepository;
 use App\Repository\CategorieRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/categorie")
  */
 class CategorieController extends AbstractController
 {
-    /**
+    /** 
+     * @isGranted("ROLE_ADMIN")
      * @Route("/", name="categorie_index", methods={"GET"})
      */
     public function index(CategorieRepository $categorieRepository): Response
@@ -136,7 +139,36 @@ class CategorieController extends AbstractController
         }
     }
 
+
+
+    /**   
+     * @Route("/menus", name="menus", methods={"GET"})
+     */
+    public function menus(MenuRepository $menuRepository): Response
+    {
+        return $this->render('categorie/menus.html.twig', [
+            'menus' => $menuRepository->findAll(),
+        ]);
+    }
+
+    /**   
+     * @Route("/tests", name="tests", methods={"GET"})
+     */
+    public function tests(CategorieRepository $categorieRepository): Response
+    {
+        $categories = $categorieRepository->findAll();
+        foreach ($categories as $categorie) {
+            $produits = $categorie->getProduits();
+            if ($categorie->getCategorieLibelle() == 'MENUS') {
+                return $this->render('categorie/tests.html.twig', [
+                    'produits' => $produits,
+                ]);
+            }
+        }
+    }
+
     /**
+     * @isGranted("ROLE_ADMIN")
      * @Route("/new", name="categorie_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -160,6 +192,7 @@ class CategorieController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMIN")
      * @Route("/{id}", name="categorie_show", methods={"GET"})
      */
     public function show(Categorie $categorie): Response
@@ -170,6 +203,7 @@ class CategorieController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMIN")
      * @Route("/{id}/edit", name="categorie_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Categorie $categorie): Response
@@ -190,6 +224,7 @@ class CategorieController extends AbstractController
     }
 
     /**
+     * @isGranted("ROLE_ADMIN")
      * @Route("/{id}", name="categorie_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Categorie $categorie): Response

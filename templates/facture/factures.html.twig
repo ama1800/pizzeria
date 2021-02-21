@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token('submit-item') }}">
+{% endblock %}
+{% block stylesheet %}
+<link rel=" stylesheet" href="https://bootswatch.com/4/journal/bootstrap.min.css">
+{% endblock %}
+{% block title %}Facture{% endblock %}
+
+{% block body %}
+{% if lastFacture | length == 1 %}
+
+
+<h3 class="ms-3">Votre dérniére facture.</h3>
+<a name="lienFacture" id="lastFacture" data-numero="{{ lastFacture.numero }}" class="btn btn-primary"
+    href="{{ path('pdf_facture', {'numero' : lastFacture.numero}) }}" role="button">Télécharger PDF</a>
+<div>
+    <div class="facture-content d-grid gap-3">
+        <div class="p-2 bg-light border">
+            <h3>Facture N°: {{ lastFacture.numero }}</h3>
+        </div><br>
+        <div class="invoice-detail-header content-block">
+            <div class="row">
+                <div class="p-2 bg-light border col-md invoice-address invoice-address-company">
+                    <h4>De :</h4>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-company-name">Nom: </label>
+                        </div>
+                        <div class="contenu">SAVEURS DE CREIL</div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-company-email">Email: </label>
+                        </div>
+                        <div class="contenu">
+                            <span class="invoice-company-email">
+                                <a href="mailto:email@host.fr">email@host.fr</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label with-baseline">
+                            <label for="invoice-company-address1">Adresse: </label>
+                        </div>
+                        <div class="contenu">
+                            <span id="text">32 PLACES SAINT MEDRAD 60100 CREIL.</span>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-company-phone">Tél: </label>
+                        </div>
+                        <div class="contenu">
+                            <span id="text">
+                                <a href="tel:+33951735430">09 51 73 54 30</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label with-baseline">
+                            <label title="Numéro Siret">N° SIREN/SIRET: </label>
+                        </div>
+                        <div class="contenu">
+                            <span id="text">84083913800012</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 bg-light border col-md invoice-address invoice-address-client">
+                    <h4>Adresse De Facturation: </h4>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-client-name">Nom: </label>
+                        </div>
+                        <div class="contenu">
+                            <div class="client-suggest">
+                                <div role="combobox" aria-haspopup="listbox" aria-owns="react-autowhatever-1"
+                                    aria-expanded="false" class="react-autosuggest__container">
+                                    <span id="text">{{
+                                        lastCommande.user.nom }} {{ lastCommande.user.prenom }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-client-email">Email:</label>
+                        </div>
+                        <div class="contenu">
+                            <div class="text-with-icon">
+                                <span id="email">
+                                    <a href="{{ lastCommande.user.email }}">{{ lastCommande.user.email }}</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label with-baseline">
+                            <label for="invoice-client-address1">Adresse: </label>
+                        </div>
+                        <div class="contenu">
+                            <div>
+                                <span id="text">
+                                    {{ lastCommande.user.adresse }} {{ lastCommande.user.cp }} {{
+                                    lastCommande.user.ville }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label">
+                            <label for="invoice-client-phone">Tél: </label>
+                        </div>
+                        <div class="contenu">
+                            <span>
+                                <a href="tel:{{ lastCommande.user.telephone }}">{{ lastCommande.user.telephone }}</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="p-2 bg-light border invoice-detail-terms content-block">
+            <div class="row">
+                <div class="col-md-6 invoice-address invoice-address-terms">
+                    <div class="span-with-label-wrapper">
+                        <div class="label with-baseline"><label for="invoice-number"
+                                class="invoice-number-label">Numéro: </label></div>
+                        <div class="contenu">
+                            <div class="text-with-icon span-with-error"><span id="text">{{ lastFacture.numero }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label"><label class="invoice-number-label">Date: </label></div>
+                        <div class="contenu">
+                            <div class="react-datepicker-wrapper">
+                                <div class="react-datepicker__span-container">
+                                    <span id="text">{{ lastFacture.createdAt|date('d-m-Y') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-with-label-wrapper">
+                        <div class="label"><label class="invoice-number-label">Conditions: </label></div>
+                        <div class="contenu">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+        <div class="p-2 bg-light border invoice-item-list content-block">
+            <h5>Détails de la commande:</h5>
+            <table class="table table-hover">
+                <thead class="table-info">
+                    <tr>
+                        <th class="invoice-detail-summary">Article</th>
+                        <th class="invoice-detail-rate">Prix</th>
+                        <th class="invoice-detail-quantity">Quantité</th>
+                        <th class="invoice-detail-total">Montant</th>
+                    </tr>
+                </thead>
+                <tbody class="table-active-bordered">
+                    {% for produit in lastCommande.produits %}
+                    <tr>
+                        <td>
+                            <span class="text-primary">
+                                {{ produit.produit.produitLibelle }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-primary">
+                                {{ produit.produit.produitPrix * 80/100 }}&nbsp;€
+
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-primary">
+                                {{ produit.qte }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-primary">
+                                {{ produit.produit.produitPrix * produit.qte * 80/100 }}&nbsp;€
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="p-2 bg-light border invoice-totals-container content-block">
+            <div class="invoice-totals-row invoice-summary-subtotal desktop">
+                <div class="invoice-summary-label">Sous-total: </div>
+                <div class="invoice-summary-value"><span class="currency">
+                        <span class="localized-number"></span>{{ lastCommande.montantTtc * 80/100 }} &nbsp;€
+
+                    </span>
+                </div>
+            </div>
+            <div class="invoice-totals-row invoice-summary-tax desktop" data-selector="invoice-summary-tax">
+                <div class="invoice-summary-label">Taxes (20%): </div>
+                <div class="invoice-summary-value">
+                    <span class="currency">{{
+                        lastCommande.montantTtc * 20/100 }}&nbsp;€
+                    </span>
+                </div>
+            </div>
+            <div class="invoice-totals-row desktop" data-selector="invoice-total">
+                <div class="invoice-summary-label">Total: </div>
+                <div class="invoice-summary-value">
+                    <span class="currency">{{ lastCommande.montantTtc }}&nbsp;€</span>
+                </div>
+            </div>
+            <div class="invoice-totals-row invoice-summary-tax desktop" data-selector="invoice-summary-tax">
+                <div class="invoice-summary-label">Frais Livraison:</div>
+                <div class="invoice-summary-value">
+                    <span class="currency">0,00&nbsp;€</span>
+                </div>
+            </div>
+            <div class="invoice-totals-row invoice-summary-balance invoice-balance bold desktop"
+                data-selector="invoice-balance">
+                <div class="invoice-summary-label">Solde Dû: </div>
+                <div class=" invoice-summary-value">
+                    <span class="currency"> {{ lastCommande.montantTtc + 0.00 }}&nbsp;€</span>
+                </div>
+            </div>
+        </div>
+        <div class="content-block">
+        </div>
+    </div>
+</div>
+{% else %}
+<span class="text-info">Vous n'avez aucune nouvelle facture</span>
+{% endif %}
+<h3>Anciennes Factures</h3>
+
+{{ knp_pagination_render(pagination) }}
+{% for facture in factures %}
+<div class="d-grid gap-3" style="width: 96%; margin: auto; padding: 1em; background-color: #fefefe;">
+    <div class="p-2 bg-light border">
+        <h6>Facture du: {{ facture.createdAt|date('d-m-Y') }}</h6>
+        <a name="lienFacture" id="lienFacture" data-numero="{{ lastFacture.numero }}" class="btn btn-primary"
+            href="{{ path('pdf_facture', {'numero' : facture.numero}) }}" role="button">Télécharger</a>&nbsp;
+        <a name="lienFacture" id="lienFacture" data-numero="{{ lastFacture.numero }}" class="btn btn-primary"
+            href="{{ path('show_facture', {'numero' : facture.numero}) }}" role="button">Afficher</a>
+    </div>
+</div>
+{% endfor %}
+
+{{ knp_pagination_render(pagination) }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/facturePdf.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

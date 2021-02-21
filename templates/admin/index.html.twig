@@ -1,20 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<h2>Panel Admin</h2>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="navId">
+    <li class="nav-item">
+        <a href="{{ path('categorie_index') }}" class="nav-link ">Categories</a>
+        <a href="{{ path('produit_index') }}" class="nav-link ">Produits</a>
+        <a href="{{ path('commentaire_index') }}" class="nav-link ">Commentaires</a>
+        <a href="{{ path('ingredient_index') }}" class="nav-link ">Ingredients</a>
+        <a href="{{ path('image_index') }}" class="nav-link ">Images</a>
+        <a href="{{ path('user_index') }}" class="nav-link ">Utilisateurs</a>
+        <a href="{{ path('facture') }}" class="nav-link ">Factures</a>
+        <a href="{{ path('commande_list') }}" class="nav-link ">Commandes</a>
+        <a href="{{ path('menu_index') }}" class="nav-link ">Menus</a>
+        <a href="{{ path('produits_on_menu_index') }}" class="nav-link ">Produits dans Menu</a>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    </li>
+    <li>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Utilisateurs</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="">En ligne</a>
+            <a class="dropdown-item" href="{{ path('user_index') }}">Tous</a>
+            <a class="dropdown-item" href="">Top Clients</a>
+        </div>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            aria-expanded="false">Liste Commande</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="">user: </a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a href="#tab5Id" class="nav-link">link</a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link ">link</a>
+    </li>
+</ul>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/Laragon/www/pizzeria/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/Laragon/www/pizzeria/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane fade show " id="tab1Id" role="tabpanel"></div>
+    <div class="tab-pane fade" id="tab2Id" role="tabpanel"></div>
+    <div class="tab-pane fade" id="tab3Id" role="tabpanel"></div>
+    <div class="tab-pane fade" id="tab4Id" role="tabpanel"></div>
+    <div class="tab-pane fade" id="tab5Id" role="tabpanel"></div>
 </div>
+
 {% endblock %}

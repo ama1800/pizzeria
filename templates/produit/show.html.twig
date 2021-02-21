@@ -1,42 +1,121 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Produit{% endblock %}
-
+{% block title %}{{ produit.produitLibelle }}{% endblock %}
 {% block body %}
-<h1>{{ produit.produitLibelle }}</h1>
 
-<table class="table">
-    <tbody>
-        <tr>
-            <th>images</th>
-            <td>
-                <div style="display: flex;">
-                    {% for image in produit.images %}
-                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
-                            src="{{ asset('uploads/' ~  image.url) }}" alt="coca"></a>
-                    <br>
-                    {% endfor %}
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th>ProduitLibelle</th>
-            <td>{{ produit.produitLibelle }}</td>
-        </tr>
-        <tr>
-            <th>ProduitPrix</th>
-            <td>{{ produit.ProduitPrix }}€</td>
-        </tr>
-        <tr>
-            <th>Disponible</th>
-            <td>{{ produit.disponible ? 'Yes' : 'No' }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="p-2 bg-light border">
+    <hr class="featurette-divider">
+    <div class="card mb-3">
+        <div class="caroulix" id="carousel">
+            <div class="caroulix-arrow caroulix-prev">
+                <i class="fa fa-chevron-left"></i>
+            </div>
+            <div class="caroulix-arrow caroulix-next">
+                <i class="fa fa-chevron-right"></i>
+            </div>
+            {% for image in produit.images %}
+            <div class="caroulix-item">
+                <img src="{{ asset('uploads/' ~  image.url) }}" class="card-img-top" alt="{{ produit.produitLibelle }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="card-body">
+        <h4 class="card-title">{{ produit.produitLibelle }}</h4>
+        <p class="card-text">{{ produit.description }}</p>
+        <span class="badge badge-primary badge-pill">{{ produit.produitPrix }}€</span>
+        <p class="card-text">
+            <small class="text-muted"> Disponible: {{ produit.disponible ? 'OUI' : 'NON' }}</small>
+        </p>
+    </div>
+    <p>
+        <button class="btn primary press modal-trigger" data-target="modale">Ajouter Votre avis!</button>
+    </p>
+</div>
+{% if is_granted('ROLE_GERANT') %}
+<div class="p-2 bg-light border">
+    <div class="flex">
+        <div>
+            <a class="btn btn-primary" href="{{ path('produit_index') }}" role="button">Liste Produits</a>
+        </div>
+        <div>
+            <a class="btn btn-warning" href=" {{ path('produit_edit', {'id': produit.id}) }}" role="button">Modifier</a>
+        </div>
+        <div>
+            {{ include('produit/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="grix xs2 sm3 gutter-0 card">
+    <div class="col-xs2 col-sm3" id="liste_commentaire">
+        <h3>Liste des commentaires</h3>
+        {% for commentaire in produit.commentaires %}
+        {% if commentaire.visible == true %}
+        {% if commentaire.parent == null %}
+        <h6>Commentaire n°:{{ loop.index }}</h6>
+        <small>Commenter par: {{ commentaire.user.prenom }} {{ commentaire.user.nom }} Le: {{
+            commentaire.commentAt|date('d/m/Y H:i') }}</small>
+        <div class="list-group">
+            <p class="mb-1">{{ commentaire.contenu }}</p>
 
-<a href="{{ path('produit_index') }}">back to list</a>
+            <!-- affichage des reponse -->
+            {% for commentaire in commentaire.reponses %}
+            {% if commentaire.visible == true %}
+            <small>Reponse par: {{ commentaire.user.prenom }} {{ commentaire.user.nom }} Le: {{
+                commentaire.commentAt|date('d/m/Y H:i') }}</small>
+            <div class="list-group">
+                <p class="mb-1">{{ commentaire.contenu }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <a id="reponse_commentaire" class="press modal-trigger" class="font-effect--neon" data-target="modale"
+                href="#" data-reply data-id="{{ commentaire.id }}">Répondre</a>
+        </div>
+        <hr class=" featurette-divider">
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<hr class="featurette-divider">
+<div class="modal white falling" id="modale">
+    <div class="col-xs2 col-sm3" id="wrapper_comment">
+        <div class="modal-header">Ajouter un avis!</div>
+        {{ form_start(form, {'attr': {'id': 'form_commentaire'}}) }}
+        <div class="modal-content">
+            {{ form_widget(form.contenu) }}
+            {{ form_row(form.note) }}
+            {{ form_row(form.rgpd) }}
+        </div>
+        <div class="divider"></div>
+        <div class="modal-footer">
+            {{ form_row(form.Envoyer, {'attr': {'class': 'btn btn-success'}}) }}
+            <button id="close_modale" data-target="modale" class="btn small success modal-trigger">&times;</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+<hr class=" featurette-divider">
+{% endblock %}
 
-<a href="{{ path('produit_edit', {'id': produit.id}) }}">edit</a>
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/axentix@0.5.3/dist/js/axentix.min.js"></script>
+<script>
 
-{{ include('produit/_delete_form.html.twig') }}
+    window.onload = () => {
+        // un ecouteur d'éventenement sur tous les bouttons répondre
+        document.querySelectorAll('[data-reply]').forEach(e => {
+            e.addEventListener('click', function () {
+                let parentId = document.querySelector("#commentaire_parentId")
+                parentId.value = this.dataset.id;
+                console.log(parentId.value)
+
+            })
+        })
+    }
+    let modal = new Modal('#modale');
+    let caroulix = new Caroulix('#carousel');
+</script>
 {% endblock %}

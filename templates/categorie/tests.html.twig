@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token('submit-item') }}">
+{% endblock %}
+
+{% block title %}TESTS{% endblock %}
+
+{% block body %}
+
+<h2 class="produits">Les Tests</h2>
+<div class="container">
+    <div class="row mb-2">
+        {% for produit in produits %}
+        <div class="col-md-6">
+            <div
+                class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative table-light">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-success">{{ produit.produitLibelle }}</strong>
+                    <a href="{{ path('produit_show', {'id': produit.id}) }}">
+                        {{ produit.produitLibelle }}
+                    </a>
+                    <div class="mb-1 text-muted">Nov 11</div>
+                    <p class="mb-auto">{{ produit.description }}.</p>
+                    <span class="stretched-link">{{ produit.ProduitPrix }}€</span>
+                </div>
+                <div>
+                    <td class="border-0 align-middle">
+                        {% if produit.disponible == 'Oui' %}
+                        <select name="qte" id="qte" data-id="{{ produit.id }}" class="custom-select">
+                            {% for i in 1..6 %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <a href="{{ path('panier_add', {'id' : produit.id}) }}"><i style=" position:relative"
+                                class="fa fa-cart-plus fa-2x"></i></a>
+                        {% else %}
+                        <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                        {% endif %}
+                    </td>
+                </div>
+                <div>
+                    {% if produit.disponible == 'Oui' %}
+                    <span data-id="{{ produit.id }}" type="submit" id="ajouter"><i style=" position:relative"
+                            class="fa fa-cart-plus fa-2x"></i></span>
+                    {% else %}
+                    <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                    {% endif %}
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <br>
+                    {% for key, image in produit.images %}
+                    {% if key == 0 %}
+                    <a href="{{ path('image_show', {'id': image.id}) }}">
+                        <img style="width:200;height:250" src="{{ asset('uploads/' ~  image.url) }}"
+                            alt="{{ produit.slug }}">
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="container marketing">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="row table-light">
+        {% for produit in produits %}
+        <div class="col-lg-4">
+            {% for key, image in produit.images %}
+            {% if key == 0 %}
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
+                xmlns="{{ asset('uploads/' ~  image.url) }}" preserveAspectRatio="xMidYMid slice" focusable="false"
+                role="img" aria-label="Placeholder: 140x140">
+                <title>{{ produit.produitLibelle }}</title>
+                <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">{{
+                    produit.ProduitPrix }}€</text>
+            </svg>
+            {% endif %}
+            {% endfor %}
+            <h2>Heading</h2>
+            <p>{{ produit.description }}</p>
+            <div>
+                {% if produit.disponible == 'Oui' %}
+                <select name="qte" id="qte" data-id="{{ produit.id }}" class="custom-select">
+                    {% for i in 1..6 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <a href="{{ path('panier_add', {'id' : produit.id}) }}"><i style=" position:relative"
+                        class="fa fa-cart-plus fa-2x"></i></a>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                {% endif %}
+            </div>
+            <div>
+                {% if produit.disponible == 'Oui' %}
+                <span data-id="{{ produit.id }}" type="submit" id="ajouter"><i style=" position:relative"
+                        class="fa fa-cart-plus fa-2x"></i></span>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-primary" disabled>Bientot</button>
+                {% endif %}
+            </div>
+            <p><a class="btn btn-secondary" href="{{ path('produit_show', {'id': produit.id}) }}" role="button">details
+                    »</a></p>
+        </div><!-- /.col-lg-4 -->
+        {% endfor %}
+    </div><!-- /.row -->
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/updatePanier.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

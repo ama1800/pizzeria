@@ -50,14 +50,51 @@ class Commande
     private $montantTtc;
 
     /**
-     * @ORM\OneToMany(targetEntity=Quantite::class, mappedBy="commande")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $quantites;
+    private $etage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $appartement;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $remarque;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $payementId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="commandes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommandeProducts::class, mappedBy="commande")
+     */
+    private $produits;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Facture::class, mappedBy="commande", cascade={"persist", "remove"})
+     */
+    private $facture;
 
     public function __construct()
     {
-        $this->quantites = new ArrayCollection();
+        $this->produits = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -136,32 +173,122 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection|Quantite[]
-     */
-    public function getQuantites(): Collection
+
+    public function getEtage(): ?int
     {
-        return $this->quantites;
+        return $this->etage;
     }
 
-    public function addQuantite(Quantite $quantite): self
+    public function setEtage(?int $etage): self
     {
-        if (!$this->quantites->contains($quantite)) {
-            $this->quantites[] = $quantite;
-            $quantite->setCommande($this);
+        $this->etage = $etage;
+
+        return $this;
+    }
+
+    public function getAppartement(): ?int
+    {
+        return $this->appartement;
+    }
+
+    public function setAppartement(?int $appartement): self
+    {
+        $this->appartement = $appartement;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getRemarque(): ?string
+    {
+        return $this->remarque;
+    }
+
+    public function setRemarque(?string $remarque): self
+    {
+        $this->remarque = $remarque;
+
+        return $this;
+    }
+
+    public function getPayementId(): ?string
+    {
+        return $this->payementId;
+    }
+
+    public function setPayementId(string $payementId): self
+    {
+        $this->payementId = $payementId;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommandeProducts[]
+     */
+    public function getProduits(): Collection
+    {
+        return $this->produits;
+    }
+
+    public function addProduit(CommandeProducts $produit): self
+    {
+        if (!$this->produits->contains($produit)) {
+            $this->produits[] = $produit;
+            $produit->setCommande($this);
         }
 
         return $this;
     }
 
-    public function removeQuantite(Quantite $quantite): self
+    public function removeProduit(CommandeProducts $produit): self
     {
-        if ($this->quantites->removeElement($quantite)) {
+        if ($this->produits->removeElement($produit)) {
             // set the owning side to null (unless already changed)
-            if ($quantite->getCommande() === $this) {
-                $quantite->setCommande(null);
+            if ($produit->getCommande() === $this) {
+                $produit->setCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(Facture $facture): self
+    {
+        // set the owning side of the relation if necessary
+        if ($facture->getCommande() !== $this) {
+            $facture->setCommande($this);
+        }
+
+        $this->facture = $facture;
 
         return $this;
     }

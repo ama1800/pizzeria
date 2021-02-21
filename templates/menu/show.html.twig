@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1>{{ menu.libelle }}</h1>
-<a href="{{ path('add_produits', {'id': menu.id }) }}">ajouter produits</a>
+<a class="btn btn-info" href="{{ path('add_produits', {'id': menu.id }) }}">Ajouter Des Produits</a>
 <table class="table table-hover">
     <tbody class="table-active">
         <tr class="table-light">
@@ -17,14 +17,22 @@
         </tr>
         <tr class="table-light">
             <th>Prix</th>
-            <td>{{ menu.prix }}€</td>
+            {% set prix = 0 %}
+            {% for menu in menu.produitsOnMenu %}
+            {% if menu.produit.ProduitPrix is defined %}
+            {% set prix = prix + menu.produit.ProduitPrix %}
+            {% if loop.last %}
+            <td>{{ prix }}€</td>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
         </tr>
         <tr class="table-light">
             <th>Les Produits</th>
             <td>
                 <div style="display: flex;">
                     <ul>
-                        {% for produit in menu.produitsOnMenus %}
+                        {% for produit in menu.produitsOnMenu %}
                         <a href="{{ path('produit_show', {'id': produit.produit.id}) }}">
                             <li>{{ produit.produit.produitLibelle }}
                                 <span class="badge bg-primary rounded-pill">{{ produit.produit.produitPrix }}€</span>

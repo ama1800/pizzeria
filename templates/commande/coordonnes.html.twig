@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de vos cordonnes{% endblock %}
+
+{% block body %}
+<h4>Merci de valider vos coordonnées pour la livraison</h4>
+<small><strong>Vous pouvez modifier vos données et ensuite appyuer sur valider.</strong></small><br>
+<div class="example-wrapper">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

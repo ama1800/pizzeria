@@ -3,12 +3,13 @@
 {% block title %}Menu index{% endblock %}
 
 {% block body %}
-<h1>Menu index</h1>
-
+<h1>Les Menus</h1>
+<a href="{{ path('menu_new') }}">
+    <h5>Ajouter</h5>
+</a>
 <table class="table table-hover">
     <thead class="table-active">
         <tr>
-            <th>Id</th>
             <th>Libelle</th>
             <th>Prix</th>
             <th>contenu</th>
@@ -18,13 +19,20 @@
     <tbody class="table-light">
         {% for menu in menus %}
         <tr>
-            <td>{{ menu.id }}</td>
-            <td>{{ menu.libelle }}</td>
-            <td>{{ menu.prix }}€</td>
+            <td><a href="{{ path('menu_show', {'id': menu.id}) }}">{{ menu.Libelle }}</a></td>
+            {% set prix = 0 %}
+            {% for menu in menu.produitsOnMenu %}
+            {% if menu.produit.ProduitPrix is defined %}
+            {% set prix = prix + menu.produit.ProduitPrix %}
+            {% if loop.last %}
+            <td>{{ prix }}€</td>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
             <td>
                 <div style="display: flex;">
                     <ul class="list-group">
-                        {% for produit in menu.produitsOnMenus %}
+                        {% for produit in menu.produitsOnMenu %}
                         <a href="{{ path('produit_show', {'id': produit.produit.id}) }}">
                             <li class="list-group-item d-flex justify-content-between align-items-center">{{
                                 produit.produit.produitLibelle }}
@@ -49,6 +57,4 @@
         {% endfor %}
     </tbody>
 </table>
-
-<a href="{{ path('menu_new') }}">Create new</a>
 {% endblock %}

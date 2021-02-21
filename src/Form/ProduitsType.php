@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Menu;
-use App\Entity\Produit;
+use App\Entity\produitsOnMenu;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,13 +16,14 @@ class ProduitsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('produitsOnMenus', CollectionType::class, [
+            ->add('produitsOnMenu', CollectionType::class, [
                 'label' => false,
                 // chaque entry dans le tableau deviendera un champ de produit
-                'entry_type' => ProduitsOnMenuType::class,
+                'entry_type' => EntityType::class,
                 // ces options sont passés à chaque "produit" type
                 'entry_options' => [
                     'label' => 'choisir Produit:',
+                    'class' => produitsOnMenu::class
                 ],
                 //true permet l'ajout et suppression des produits
                 'allow_add' => true,

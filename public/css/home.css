@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-/* limiter le contenu dans les limites de la page (dans toute la page le padding et le margin sont inclus dans la taille du parent)*/
+/* limiter le contenu dans les limites de la page 
+(dans toute la page le padding et le margin sont inclus dans la taille du parent)*/
 *{
     box-sizing: border-box;
 }
@@ -22,7 +23,7 @@ header{
 main{
     width: 100%;
     position: relative;
-    display: flex;
+    display: flex !important;
     margin: auto;
 }
 footer{
@@ -32,9 +33,9 @@ footer{
     align-items: center;
 }
 a{
-    text-decoration: none;
+    text-decoration: none !important;
     cursor: pointer;
-    color: #e36b23;
+    text-align: center;
 }
 /* nav du header */
 .navhead{
@@ -44,8 +45,8 @@ a{
 .headup{
     position: relative;
     justify-content: space-between;
-    font-size: 15px;
-    width: 100%;
+    width: 99%;
+    margin: auto;
 }
 .headup img{
     width: 80px;
@@ -74,7 +75,7 @@ a{
     margin-left: 20%;
 }
 .delivry a{
-    margin-right: 5%;
+    margin: 0 20%;
 }
 .user{
     display: flex;
@@ -91,11 +92,19 @@ a{
     position: absolute;
     right: 0%;
 }
+/* Le panier ainsi que le nombre d'article qu'il contient */
 .panier{
     position: absolute;
     right: 0;
     top: 20%;
     width: 20%;
+    text-align: center !important;
+}
+#panierCount{
+    color: white !important;
+    background-color: red !important;
+    font-size: large;
+    font-weight: bold;
 }
 /* nav du bas du header */
 #headdown{
@@ -113,7 +122,7 @@ a{
 /* les messages flash page d'accueil */
 .flash{
     background: #2F8A45;
-    color: red;
+    color: wheat;
     margin: unset;
     text-align: center;
     font-size: x-large;
@@ -162,7 +171,7 @@ display: none;
     margin: 5% 0;
 }
 /* main coté guauche */
-/* div wrapper */
+/* div wrapper recevera le contenu backend */
 #wrapper{
     width: 75%;
     background: #BDB76B;
@@ -274,7 +283,18 @@ i{
     right: 40%;
     color: #2F8A45;
     padding: 1% 0;
+    margin-left: 40%;
 }
+i:hover .fa.fa-plus::after{
+    content: "Ajouter";
+}
+.fa.fa-minus:hover{
+    content: "&#xf067;";
+}
+.fa.fa-plus:hover{
+    content: "Supprimer";
+}
+
 /* la galerie (Le Modal) */
 
 .media{
@@ -282,10 +302,13 @@ i{
 }
 .row{
     display: flex;
+    width: 99%;
+    margin: auto;
 }
 .row img{
     width: 99%;
     height: 99%;
+    cursor: zoom-in;
 }
 .row:after {
   content: "";
@@ -391,7 +414,6 @@ i{
     color: white;
     margin: auto;
 }
-  
   img.demo {
     opacity: 0.6;
     width: 99%;
@@ -483,8 +505,37 @@ i{
     padding: 4%;
     margin-bottom: 10%;
 }
+/* modal commentaire produit*/
+#form_commentaire{
+    width: 100% !important;
+    margin: 0 !important;
+}
+#close_modale{
+    position: absolute;
+    top: 0;
+    left: 0%;
+}
+#wrapper_comment{
+    width: 98%;
+    margin: auto;
+    content: unset;
+}
+#liste_commentaire{
+    margin: 0 0 0 1em;
 
-
+}
+#reponse_commentaire{
+    font-family: "Sofia",  sans-serif;
+    text-decoration: none !important;
+    cursor: pointer;
+    text-align: center;
+}
+.modal-header {
+    color: yellowgreen;
+}
+.card{
+    margin: 0 !important;
+}
 /* .contact de contact*/
 
 /* formulaire de contact */
@@ -520,7 +571,7 @@ i{
     }
     #formulaire div{
     padding-top:4% ;
-    width: 50%;
+    width: 100%;
     height: 100%;
     }
     #formulaire input{
@@ -529,16 +580,17 @@ i{
     background-color: rgb(128, 128, 128, 0.2);
     border: 0.1px;
     }
-    #formulaire #message{
+    #formulaire #contact_message, #commentaire_contenu{
     width: 90%;
     height: 117px;
     background-color: rgb(128, 128, 128, 0.2);
     border: 0.1px;
     }
-    .contact #send1{
-    width: 10%;
+    .contact #contact_envoyer{
+    width: 20%;
     height: 40px;
     margin-left: 50%;
+    border-radius: .5em;
     color: white;
     font-weight: bolder;
     cursor:pointer; 
@@ -548,8 +600,18 @@ i{
     content: "*";
     color: rgb(255, 8, 0);
     }
-    
-
+    #rgpd{
+        position: relative;
+    }
+    #contact_rgpd{  
+    position: absolute;
+    max-width: 8%;
+    top: -7%;
+    left: -12%;
+    }
+    span.form-error-message{
+        color: red;
+    }
 /* footer */
 .foot{
     display: flex;
@@ -577,7 +639,7 @@ i{
     height: max-content;
     z-index: 1;
 }
-.socialMedia{
+.socialm{
     width: 20%;
     padding: 3%;
 }
@@ -618,4 +680,109 @@ height: 50px;
 }
 .produits{
     margin-left: 40%;
+}
+/* accordion produits */
+.accordion{
+    cursor: pointer;
+}
+.panel{
+    color: black;
+}
+.accordion:after {
+content: '\002B';
+position: absolute;
+cursor: pointer;
+color: #e36b23;
+left: 25%;
+font-size: xxx-large;
+}
+.active:after {
+content: "\2212"; 
+}
+.list-group.active:after{
+content: none; 
+}
+.caroulix-item.active:after{
+content: none; 
+}
+.mb-1{
+    width: 90%;
+    background-color: rgb(128, 128, 128, 0.2);
+    border: 0.1px;
+}
+/* messages flash */
+div.alert{
+    margin-bottom: 0 !important;
+}
+
+/* tous les th td */
+td, th{
+    text-align: center !important;
+}
+.form-check {
+    display: grid !important;
+}
+
+/* La facture */
+.facture-content{
+    background-color: #fefefe;
+    width: 96%;
+    margin: auto;
+    padding: 1em;
+}
+.content .content-block {
+    padding-left: 48px;
+    padding-right: 48px;
+}
+
+.invoice-totals-container .invoice-totals-row {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.invoice-totals-container .invoice-summary-label {
+    margin-left: 0;
+    text-align: right;
+}
+
+.invoice-totals-container .invoice-summary-value {
+    min-width: 130px;
+    text-align: right;
+}
+
+.invoice-totals-container {
+    position: relative;
+    width: 100%;
+    margin-top: 8px;
+}
+.span-with-label-wrapper{
+    float: unset;
+    display: flex;
+}
+.label{
+    background-color: unset;
+}
+label{
+    color: black;
+}
+.span-with-label-wrapper [class*="span"]{
+    min-height: unset !important;
+}
+.contenu{
+    margin-left: 3%;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: "Roboto",  sans-serif !important;
+}
+.badge-primary{
+    width: 12%;
+}
+/* carousel produit */
+#carousel{
+    height: 400px;
+    width: 50%;
+    margin: auto;
 }

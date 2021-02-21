@@ -1,43 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Commentaire index{% endblock %}
+{% block title %}Commentaires{% endblock %}
 
 {% block body %}
-    <h1>Commentaire index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>CommentAt</th>
-                <th>Contenu</th>
-                <th>Note</th>
-                <th>Visible</th>
-                <th>Rgpd</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+<h1>Commentaires</h1>
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Auteur</th>
+            <th>Contenu</th>
+            <th>Produit</th>
+            <th>Note</th>
+            <th>Visible</th>
+            <th>Date</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody class="table-light">
         {% for commentaire in commentaires %}
-            <tr>
-                <td>{{ commentaire.id }}</td>
-                <td>{{ commentaire.commentAt ? commentaire.commentAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ commentaire.contenu }}</td>
-                <td>{{ commentaire.note }}</td>
-                <td>{{ commentaire.visible ? 'Yes' : 'No' }}</td>
-                <td>{{ commentaire.rgpd ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('commentaire_show', {'id': commentaire.id}) }}">show</a>
-                    <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}">edit</a>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ commentaire.user.nom }} {{ commentaire.user.prenom }}</td>
+            <td>{{ commentaire.contenu }}</td>
+            <td>{{ commentaire.produit.produitLibelle }}</td>
+            <td>{{ commentaire.note }}</td>
+            <td>
+                {% if commentaire.visible == 0 %}
+                <a class="btn btn-outline-success"
+                    href="{{ path('commentaire_activer', {'id': commentaire.id}) }}">Activer</a>
+                {% else %}
+                <a class="btn btn-outline-danger"
+                    href="{{ path('commentaire_desactiver', {'id': commentaire.id}) }}">Désactiver</a>
+                {% endif %}
+            </td>
+            <td>{{ commentaire.commentAt ? commentaire.commentAt|date('Y-m-d H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('commentaire_show', {'id': commentaire.id}) }}">Afficher</a>
+                <a href="{{ path('commentaire_edit', {'id': commentaire.id}) }}">Modifier</a>
+                {{ include('commentaire/_delete_form.html.twig') }}
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
+        <tr>
+            <td colspan="text-info">Nombre de commentaires: 0.</td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('commentaire_new') }}">Create new</a>
+    </tbody>
+</table>
 {% endblock %}

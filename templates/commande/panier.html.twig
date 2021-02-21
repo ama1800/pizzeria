@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+{% block meta %}
+<meta name="csrf-token" content="{{ csrf_token('submit-item') }}">
+{% endblock %}
+
+{% block title %}Le Panier!{% endblock %}
+
+{% block body %}
+<h2>Votre Panier</h2>
+{% if items | length > 0 %}
+<table class="table table-hover">
+    <thead class="table-active">
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+            <th>Image</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    {% for produit in items %}
+    <tbody class="table-light">
+        <tr>
+            <td>{{ produit.produit.produitLibelle }}</td>
+            <td>{{ produit.produit.produitPrix }}€</td>
+            <td>{{ produit.quantite }}</td>
+            <td>{{ produit.produit.produitPrix * produit.quantite }}€</td>
+            <td>
+                <div style="display: flex;">
+                    {% for key, image in produit.produit.images %}
+                    {% if key == 0 %}
+                    <a href="{{ path('image_show', {'id': image.id}) }}"><img class="img-fluid"
+                            src="{{ asset('uploads/' ~  image.url) }}" alt=""></a>
+                    <br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </td>
+            <td>
+                <span data-id="{{ produit.produit.id }}" id="plus" class="btn btn-sm"><i style=" position:relative"
+                        class="fa fa-plus fa-1x"></i></span>
+                <span data-id="{{ produit.produit.id }}" id="moins" class="btn btn-sm"><i style=" position:relative"
+                        class="fa fa-minus fa-1x"></i></span>
+                <span data-id="{{ produit.produit.id }}" id="sup" class="btn btn-sm"><i style=" position:relative"
+                        class="fa fa-trash-o fa-1x"></i></span>
+            </td>
+        </tr>
+    </tbody>
+    {% endfor %}
+    <tfoot class="table-active">
+        <tr>
+            <td colspan="3" class="text-right">Total: {{ total[0] }}€</td>
+            {% if total[1] > 0 %}
+            <button class="btn btn-outline-success" id="payer" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z">
+                    </path>
+                </svg>
+                Payer
+            </button>
+            <p colspan="2" class="text-center"><strong>Il vous faut encore {{ total[1] }}€ pour atteidre le
+                    minumun à commander.</strong> <br>
+                <small>Vous ne pouvez pas encore commander. Nous livrons à partir d’un montant minimum de 15,00 €
+                    (hors
+                    frais de livraison calculer par rapport à l'adresse de livraison).</small>
+            </p>
+            {% else %}
+            <a href="{{ path('commande_coordonnes') }}" class="btn btn-outline-success" id="payer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z">
+                    </path>
+                </svg>
+                Payer
+            </a>
+
+            {% endif %}
+        </tr>
+    </tfoot>
+</table>
+
+{% else %}
+<p>Votre panier est vide!</p>
+{% endif %}
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/panier.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}

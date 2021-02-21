@@ -8,8 +8,10 @@ var $newLinkLi = $('<li></li>').append($addCollectionButton);
 
 function generateDeleteButton() {
   var $btn = $delCollectionButton.clone();
-  $btn.on("click", function () {//événement clic du bouton supprimer
+  $btn.on("click", function () {
+    //événement clic du bouton supprimer
     $(this).parent("li").remove();
+    // supprime l'element de la séléction
     $collection.data('index', $collection.data('index') - 1)
   })
   return $btn;

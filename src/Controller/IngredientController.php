@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/ingredient")
@@ -25,7 +26,8 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * @isGranted("ROLE_GERANT")
      * @Route("/new", name="ingredient_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -58,7 +60,8 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * @isGranted("ROLE_GERANT")
      * @Route("/{id}/edit", name="ingredient_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Ingredient $ingredient): Response
@@ -78,12 +81,13 @@ class IngredientController extends AbstractController
         ]);
     }
 
-    /**
+    /** 
+     * @isGranted("ROLE_GERANT")
      * @Route("/{id}", name="ingredient_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Ingredient $ingredient): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$ingredient->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $ingredient->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($ingredient);
             $entityManager->flush();

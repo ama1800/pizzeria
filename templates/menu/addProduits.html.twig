@@ -3,9 +3,8 @@
 <h2>{{menu.libelle}}</h2>
 
 {{ form_start(form) }}
-<ul id="gestionProduits" data-prototype="{{ form_row(form.produitsOnMenus.vars.prototype)|e }}">
-
-    {% for produit in form.produitsOnMenus %}
+<ul id="gestionProduits" data-prototype="{{ form_row(form.produitsOnMenu.vars.prototype)|e }}">
+    {% for produit in form.produitsOnMenu %}
     <li class="gestionProduit">{{ form_row( produit ) }}</li>
 
     {% endfor %}
