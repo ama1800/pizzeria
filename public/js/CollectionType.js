@@ -1,8 +1,8 @@
 
 /** CollectionType*/
 //création de 3 éléments HTMLElement    
-var $addCollectionButton = $('<button type="button" class="add_collection_link">Ajouter Produit</button>');
-var $delCollectionButton = $('<button type="button" class="del_collection_link">Supprimer Produit</button>');
+var $addCollectionButton = $('<a type="button" class="add_collection_link btn btn-sm btn-outline-secondary">Ajout Produit</a>');
+var $delCollectionButton = $(`<a type="button" class="del_collection_link btn btn-sm btn-outline-danger">Supprime Produit</a>`);
 //le premier élément li de la liste (celui qui contient le bouton 'ajouter')
 var $newLinkLi = $('<li></li>').append($addCollectionButton);
 
