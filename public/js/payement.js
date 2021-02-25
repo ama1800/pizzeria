@@ -73,7 +73,8 @@ form.addEventListener('submit', function (ev) {
             },
             method: 'post',
             body: JSON.stringify({
-              paymentIntent: paymentIntent
+              paymentIntent: paymentIntent,
+              csrf: token
             })
           }
         ).then((data) => {

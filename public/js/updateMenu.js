@@ -36,6 +36,7 @@ window.onload = () => {
                                 method: 'patch',
                                 body: JSON.stringify({
                                     qte: 1,
+                                    csrf: token
                                 })
                             }
                         ).then((data) => {
@@ -77,6 +78,7 @@ window.onload = () => {
                                 method: 'patch',
                                 body: JSON.stringify({
                                     qte: this.value,
+                                    csrf: token
                                 })
                             }
                         ).then((data) => {

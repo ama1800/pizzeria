@@ -113,7 +113,6 @@ class CommandeController extends AbstractController
     public function payementIntention(Request $request, PanierService $panierService): Response
     {
         $panier = $panierService->fullPanier();
-        // dd($panier);
         $total = $panierService->getTotal()[0];
         $user = $this->getUser();
         if ($user) {
@@ -302,17 +301,21 @@ class CommandeController extends AbstractController
         $data = $request->getContent();
         // contenu converti en json
         $params = json_decode($data, true);
-        // la quantité selectionnée et envoyer en ajax
-        $qte = intval($params['qte']);
-        // id de l'url à incrementer
-        $id = $request->get('id');
-        $panier->panierUp($id, $qte);
-        $this->addFlash('success', 'Produit ajouter au panier');
-        return new Response(json_encode([
-            'success' => 'Produits ont été ajouter.',
-            'items' => $panier->fullPanier(),
-            'total' => $panier->getTotal(),
-            'nb' => $panier->nbProduits()
-        ]));
+        //Vérifier le CSRF
+        if ($this->isCsrfTokenValid('submit-item', $params['csrf'])) {
+            // la quantité selectionnée et envoyer en ajax
+            $qte = intval($params['qte']);
+            // id de l'url à incrementer
+            $id = $request->get('id');
+            $panier->panierUp($id, $qte);
+            $this->addFlash('success', 'Produit ajouter au panier');
+            return new Response(json_encode([
+                'success' => 'Produits ont été ajouter.',
+                'items' => $panier->fullPanier(),
+                'total' => $panier->getTotal(),
+                'nb' => $panier->nbProduits()
+            ]));
+        }
+        // else return new Response(error_log('Erreur..!'));
     }
 }

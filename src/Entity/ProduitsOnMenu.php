@@ -19,13 +19,13 @@ class ProduitsOnMenu
 
     /**
      * @ORM\ManyToOne(targetEntity=Produit::class, inversedBy="produitsOnMenu")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $produit;
 
     /**
      * @ORM\ManyToOne(targetEntity=Menu::class, inversedBy="produitsOnMenu")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $menu;
 

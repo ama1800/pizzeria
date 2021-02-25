@@ -25,6 +25,7 @@ Array.from(plus).forEach(e => {
                 method: 'patch',
                 body: JSON.stringify({
                     qte: 1,
+                    csrf: token
                 })
             }
         ).then((data) => {
@@ -58,6 +59,7 @@ Array.from(moins).forEach(e => {
                 method: 'patch',
                 body: JSON.stringify({
                     qte: 1,
+                    csrf: token
                 })
             }
         ).then((data) => {
@@ -90,6 +92,7 @@ Array.from(sup).forEach(e => {
                 method: 'patch',
                 body: JSON.stringify({
                     qte: 1,
+                    csrf: token
                 })
             }
         ).then((data) => {

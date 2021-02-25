@@ -21,14 +21,15 @@ Array.from(selects).forEach(e => {
                     'Content-Type': 'application/json',
                     "Accept": "application/json, text/plain, */*",
                     "X-Requisted-With": "XMLHttpRequest",
-                    "X-CSRF-TOKEN": token
+                   // "X-CSRF-TOKEN": token
                 },
                 // la méthode à exucuter
                 method: 'patch',
                 // conversion du json en string pour l'exploiter
                 body: JSON.stringify({
                     //apés stringify en récupére la quantite choisi
-                    qte: this.value
+                    qte: this.value,
+                    csrf: token
                 })
             }
             //fin du fetch début de l'exploitation du données (ds le controller)
@@ -64,6 +65,7 @@ Array.from(addToCart).forEach(e => {
                 method: 'patch',
                 body: JSON.stringify({
                     qte: 1,
+                    csrf: token
                 })
             }
         ).then((data) => {
